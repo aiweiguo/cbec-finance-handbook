@@ -14,9 +14,9 @@ python3 -m http.server 8765
 
 ## 部署
 
-目标域名：<https://cw.newdata.top>
+线上：<https://cw.newdata.top>
 
-静态文件在 VPS `152`（`43.228.86.35`）的 `/var/www/cw`，nginx 已按该域名提供页面。DNS 在 Cloudflare 增加灰云 A 记录 `cw` → `43.228.86.35` 后，用 certbot 签发证书。
+静态文件在 VPS `152`（`43.228.86.35`）的 `/var/www/cw`，nginx 直接提供。DNS 保持 Cloudflare 灰云，证书由 certbot 签发，到期 2027-01-25，之后自动续期。
 
 更新页面：
 
