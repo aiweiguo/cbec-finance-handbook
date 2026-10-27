@@ -34,7 +34,9 @@ a:hover{text-decoration:underline}
   width:var(--sidebar-w); height:100%; min-height:0;
   background:var(--sidebar); border-right:1px solid var(--line);
   padding:28px 16px 24px; overflow:auto; z-index:40;
+  scrollbar-width:none;
 }
+.sidebar::-webkit-scrollbar{width:0;height:0;display:none}
 .brand{padding:0 10px 20px; border-bottom:1px solid var(--line2); margin-bottom:14px}
 .brand .mark{
   width:36px; height:36px; border-radius:10px; background:linear-gradient(145deg,#0071e3,#64d2ff);
@@ -67,9 +69,12 @@ a:hover{text-decoration:underline}
 .topbar .title{font-size:1.05rem; font-weight:650; letter-spacing:-.02em; margin:0; line-height:1.25}
 .topbar .sub{margin:1px 0 0; font-size:.75rem; color:var(--muted); line-height:1.3}
 .topbar-search{flex:1 1 auto; min-width:140px; max-width:420px; margin-left:auto; position:relative}
-.page-counter{
-  flex:0 0 auto; font-size:.78rem; color:var(--muted);
-  font-variant-numeric:tabular-nums; letter-spacing:.04em; white-space:nowrap;
+.read-progress{
+  flex:0 0 auto; height:2px; background:rgba(0,0,0,.06); overflow:hidden;
+}
+.read-progress > span{
+  display:block; height:100%; width:100%; background:var(--blue);
+  transform:scaleX(0); transform-origin:left center;
 }
 .stage{flex:1; min-height:0; position:relative; overflow:hidden}
 .main{
@@ -80,30 +85,51 @@ a:hover{text-decoration:underline}
   box-shadow:var(--shadow); padding:28px; margin:0;
 }
 .slide{
-  position:absolute; inset:0; overflow:auto;
-  padding:22px 28px 72px; opacity:0; visibility:hidden;
-  transform:translateX(18px);
-  transition:opacity .28s ease, transform .32s cubic-bezier(.2,.8,.2,1), visibility .28s;
-  scrollbar-width:thin; pointer-events:none;
+  position:absolute; top:0; bottom:0; left:50%;
+  width:min(920px, calc(100% - 48px));
+  transform:translateX(-50%);
+  overflow:auto; display:none;
+  padding:22px 28px 36px;
+  background:#fff; border:none; box-shadow:none; border-radius:0;
+  scrollbar-width:none;
 }
-.slide.active{opacity:1; visibility:visible; transform:translateX(0); z-index:2; pointer-events:auto}
-.slide.leaving{transform:translateX(-14px)}
-.slide.panel{
-  max-width:980px; margin:0 auto; left:0; right:0;
-  padding:28px 28px 72px;
+.slide::-webkit-scrollbar{width:0;height:0;display:none}
+.slide.active{display:block}
+.slide.panel{max-width:none; margin:0; padding:22px 0 36px}
+.chapter-end{margin-top:22px}
+.chapter-end .next-chap{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:14px 16px; border-radius:14px; text-decoration:none;
+  background:var(--blue-soft); color:var(--blue); font-weight:620;
 }
+.chapter-end .next-chap:hover{text-decoration:none; background:rgba(0,113,227,.16)}
+.chapter-end .next-chap small{font-weight:500; color:var(--muted); font-size:.75rem}
 .page-nav{
-  position:absolute; right:22px; bottom:18px; z-index:20;
-  display:flex; gap:8px;
+  flex:0 0 auto; display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  gap:10px; align-items:center;
+  padding:8px 16px 10px; border-top:1px solid var(--line);
+  background:#fbfbfd;
 }
 .page-nav button{
-  width:42px; height:42px; border-radius:999px; border:1px solid var(--line);
-  background:rgba(255,255,255,.92); box-shadow:var(--shadow);
-  font-size:1.05rem; color:var(--text); cursor:pointer;
-  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  width:100%; min-width:0; height:auto; border-radius:12px;
+  border:1px solid var(--line); background:#fff; box-shadow:none;
+  padding:7px 12px; cursor:pointer; color:var(--text);
+  display:flex; flex-direction:column; gap:1px;
 }
+.page-nav button.next{align-items:flex-end; text-align:right}
 .page-nav button:hover{border-color:rgba(0,113,227,.35); color:var(--blue)}
-.page-nav button:disabled{opacity:.35; cursor:default; color:var(--muted)}
+.page-nav button:disabled{opacity:.4; cursor:default; color:var(--muted)}
+.page-nav .nav-k{font-size:.68rem; color:var(--muted); font-weight:600; letter-spacing:.04em}
+.page-nav .nav-t{
+  font-size:.86rem; font-weight:620; max-width:100%;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.page-mid{text-align:center; min-width:88px; padding:0 4px}
+.page-mid .page-name{
+  font-size:.84rem; font-weight:650; letter-spacing:-.01em;
+  max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.page-mid .page-meta{margin-top:1px; font-size:.72rem; color:var(--muted); font-variant-numeric:tabular-nums}
 .panel h2{margin:0 0 6px; font-size:1.35rem; font-weight:650; letter-spacing:-.02em}
 .panel .lead{margin:0 0 16px; color:var(--muted); font-size:.92rem}
 .cols{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:16px 0}
@@ -188,11 +214,12 @@ details.sources summary{cursor:pointer; color:var(--muted); font-size:.85rem}
   .sidebar.open{transform:none}
   .menu-btn{display:inline-flex}
   .topbar{padding-left:18px; padding-right:18px}
-  .slide{padding:16px 18px 72px}
+  .slide{width:min(920px, calc(100% - 28px)); padding:16px 0 28px}
   .topbar-search{max-width:none; flex:1 1 160px}
   .topbar .title{font-size:.95rem}
-  .page-counter{display:none}
-  .page-nav{right:14px; bottom:14px}
+  .page-nav{grid-template-columns:auto minmax(0,1fr) auto; padding:8px 10px}
+  .page-nav .nav-t{max-width:34vw}
+  .page-mid .page-name{max-width:28vw}
 }
 
 .footer-note{color:var(--muted); font-size:.78rem; margin-top:8px}
@@ -372,9 +399,9 @@ details.sources summary{cursor:pointer; color:var(--muted); font-size:.85rem}
           </div>
           <div id="searchPanel" role="listbox" aria-label="检索结果"></div>
         </div>
-        <div class="page-counter" id="pageCounter" aria-live="polite">01 / 20</div>
       </div>
     </div>
+    <div class="read-progress" aria-hidden="true"><span id="readProgress"></span></div>
 
     <div class="stage">
     <main class="main" id="deck">
@@ -1209,10 +1236,20 @@ details.sources summary{cursor:pointer; color:var(--muted); font-size:.85rem}
       </section>
 
     </main>
-    <div class="page-nav" aria-label="翻页控制">
-      <button type="button" id="prevPage" aria-label="上一页">←</button>
-      <button type="button" id="nextPage" aria-label="下一页">→</button>
     </div>
+    <div class="page-nav" aria-label="翻章">
+      <button type="button" id="prevPage">
+        <span class="nav-k">上一章</span>
+        <span class="nav-t" id="prevTitle">已是开头</span>
+      </button>
+      <div class="page-mid">
+        <div class="page-name" id="pageName">怎么自学这本手册</div>
+        <div class="page-meta"><span id="pageCounter">01 / 20</span> · <span id="scrollHint">本章可继续下滑</span></div>
+      </div>
+      <button type="button" class="next" id="nextPage">
+        <span class="nav-k">下一章</span>
+        <span class="nav-t" id="nextTitle">下一章</span>
+      </button>
     </div>
   </div>
 </div>
@@ -1486,6 +1523,17 @@ function findSlideIdForEl(el){
   if(el.id && SLIDE_ORDER.includes(el.id)) return el.id;
   return null;
 }
+function slideTitle(el){
+  if(!el) return "";
+  const h=el.querySelector("h2");
+  if(!h) return el.id||"";
+  const numEl=h.querySelector(".flow-num");
+  const num=numEl ? numEl.textContent.trim() : "";
+  const clone=h.cloneNode(true);
+  clone.querySelectorAll(".flow-num").forEach(n=>n.remove());
+  const rest=clone.textContent.replace(/\s+/g," ").trim();
+  return num ? (num+" "+rest) : rest;
+}
 function updatePageChrome(){
   const slides=slideEls();
   const n=slides.length;
@@ -1495,13 +1543,57 @@ function updatePageChrome(){
     const tot=String(n).padStart(2,"0");
     counter.textContent=cur+" / "+tot;
   }
+  const name=document.getElementById("pageName");
+  if(name) name.textContent=slideTitle(slides[currentSlide]);
   const prev=document.getElementById("prevPage");
   const next=document.getElementById("nextPage");
+  const prevTitle=document.getElementById("prevTitle");
+  const nextTitle=document.getElementById("nextTitle");
   if(prev) prev.disabled=currentSlide<=0;
   if(next) next.disabled=currentSlide>=n-1;
+  if(prevTitle) prevTitle.textContent=currentSlide<=0 ? "已是开头" : slideTitle(slides[currentSlide-1]);
+  if(nextTitle) nextTitle.textContent=currentSlide>=n-1 ? "已是末章" : slideTitle(slides[currentSlide+1]);
   document.querySelectorAll(".side-nav a").forEach(a=>{
     const href=a.getAttribute("href")||"";
     a.classList.toggle("active", href==="#"+SLIDE_ORDER[currentSlide]);
+  });
+  paintProgress();
+}
+function paintProgress(){
+  const slides=slideEls();
+  const el=slides[currentSlide];
+  const bar=document.getElementById("readProgress");
+  const hint=document.getElementById("scrollHint");
+  if(!el) return;
+  const max=el.scrollHeight-el.clientHeight;
+  const local=max<=8 ? 1 : Math.min(1, el.scrollTop/max);
+  const overall=(currentSlide+local)/Math.max(1, slides.length);
+  if(bar) bar.style.transform="scaleX("+overall.toFixed(4)+")";
+  if(hint){
+    if(max<=8) hint.textContent="本章已完整显示";
+    else if(local>0.92) hint.textContent="已到本章末尾";
+    else hint.textContent="本章可继续下滑";
+  }
+}
+function mountChapterEnds(){
+  const slides=slideEls();
+  slides.forEach((s,i)=>{
+    if(s.querySelector(":scope > .chapter-end")) return;
+    const nxt=slides[i+1];
+    if(!nxt) return;
+    const end=document.createElement("div");
+    end.className="chapter-end";
+    const a=document.createElement("a");
+    a.className="next-chap";
+    a.href="#"+nxt.id;
+    const small=document.createElement("small");
+    small.textContent="读完本章";
+    const strong=document.createElement("span");
+    strong.textContent="下一章 · "+slideTitle(nxt);
+    a.appendChild(small);
+    a.appendChild(strong);
+    end.appendChild(a);
+    s.appendChild(end);
   });
 }
 function goTo(index, opts){
@@ -1513,11 +1605,7 @@ function goTo(index, opts){
   const same=next===currentSlide;
   if(!same){
     const prevEl=slides[prevIdx];
-    if(prevEl){
-      prevEl.classList.remove("active");
-      prevEl.classList.add("leaving");
-      setTimeout(()=>prevEl.classList.remove("leaving"), 320);
-    }
+    if(prevEl) prevEl.classList.remove("active");
     currentSlide=next;
     slides[currentSlide].classList.add("active");
   }
@@ -1526,7 +1614,8 @@ function goTo(index, opts){
   if(targetSel){
     const t=typeof targetSel==="string" ? document.querySelector(targetSel) : targetSel;
     if(t && cur.contains(t)){
-      requestAnimationFrame(()=>{ try{ t.scrollIntoView({behavior:"smooth", block:"start"}); }catch(e){} });
+      const top=t.getBoundingClientRect().top-cur.getBoundingClientRect().top+cur.scrollTop-8;
+      cur.scrollTop=Math.max(0, top);
     } else {
       cur.scrollTop=0;
     }
@@ -1573,6 +1662,11 @@ function goToId(id, opts){
   goTo(idx, Object.assign({}, extra, opts||{}));
 }
 function setupSideNav(){
+  mountChapterEnds();
+  slideEls().forEach(s=>{
+    s.addEventListener("scroll", ()=>{ if(s.classList.contains("active")) paintProgress(); }, {passive:true});
+  });
+  window.addEventListener("resize", ()=>paintProgress());
   const links=[...document.querySelectorAll(".side-nav a")];
   links.forEach(a=>{
     a.addEventListener("click", e=>{
@@ -1619,7 +1713,11 @@ function setupSideNav(){
     currentSlide=idx>=0?idx:0;
     if(slides[currentSlide]) slides[currentSlide].classList.add("active");
     if(el && el.id!==sid){
-      requestAnimationFrame(()=>{ try{ el.scrollIntoView({block:"start"}); }catch(e){} });
+      const cur=slides[currentSlide];
+      if(cur){
+        const top=el.getBoundingClientRect().top-cur.getBoundingClientRect().top+cur.scrollTop-8;
+        cur.scrollTop=Math.max(0, top);
+      }
     }
     updatePageChrome();
   } else {
