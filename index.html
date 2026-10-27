@@ -229,6 +229,30 @@ details.sources summary{cursor:pointer; color:var(--muted); font-size:.85rem}
 .brand h1{font-size:.88rem; font-weight:600; line-height:1.35; margin:0; color:var(--text)}
 .brand p{margin:4px 0 0; font-size:.72rem; color:var(--muted)}
 
+
+.feedback-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px}
+@media(max-width:760px){.feedback-grid{grid-template-columns:1fr}}
+.feedback-block{background:var(--fill);border:1px solid var(--line2);border-radius:var(--radius-sm);padding:14px 16px}
+.feedback-block h3{margin:0 0 6px;font-size:.98rem;font-weight:620}
+.fb-desc{margin:0 0 10px;font-size:.84rem;color:var(--muted);line-height:1.45}
+.feedback-block textarea{
+  width:100%;min-height:78px;resize:vertical;padding:10px 12px;border:1px solid var(--line);
+  border-radius:10px;font-size:.88rem;font-family:inherit;color:var(--text);background:#fff;line-height:1.45
+}
+.feedback-block textarea:focus{outline:none;border-color:rgba(0,113,227,.45);box-shadow:0 0 0 3px rgba(0,113,227,.15)}
+.fb-list{list-style:none;padding:0;margin:10px 0 0;max-height:220px;overflow:auto}
+.fb-list li{
+  background:#fff;border:1px solid var(--line2);border-radius:10px;padding:8px 10px;margin:0 0 6px;
+  font-size:.82rem;display:flex;gap:8px;align-items:flex-start
+}
+.fb-list li .meta{color:var(--muted);font-size:.72rem;flex:0 0 auto;white-space:nowrap}
+.fb-list li .body{flex:1;min-width:0;word-break:break-word}
+.fb-list li button.del{
+  flex:0 0 auto;padding:2px 8px;font-size:.72rem;border:1px solid var(--line);border-radius:8px;background:#fff;cursor:pointer
+}
+.fb-list .empty-li{color:var(--muted);border:none;background:transparent;padding:4px 0;margin:0}
+.fb-toast{font-size:.78rem;color:var(--blue);margin-left:8px}
+
 </style>
 </head>
 <body>
@@ -263,6 +287,10 @@ details.sources summary{cursor:pointer; color:var(--muted); font-size:.85rem}
       <a href="#checker">自查灯</a>
       <a href="#export-list">禁限可查清单</a>
       <a href="#archive">资料卡片库</a>
+    </nav>
+    <div class="side-label">反馈</div>
+    <nav class="side-nav">
+      <a href="#feedback">反馈与增补</a>
     </nav>
     <div class="side-foot">2026-10-27</div>
   </aside>
@@ -974,6 +1002,35 @@ details.sources summary{cursor:pointer; color:var(--muted); font-size:.85rem}
         <div id="archiveCards"></div>
       </section>
 
+
+      <section class="panel" id="feedback">
+        <h2>反馈与增补</h2>
+        <p class="lead">收集「搜不到」与「想知道但学习中心还没有」的内容，仅保存在本机浏览器（localStorage），方便后续按真实需求增补手册；不依赖后端、不会自动上传。</p>
+        <div class="feedback-grid">
+          <div class="feedback-block">
+            <h3>未匹配检索记录</h3>
+            <p class="fb-desc">顶栏或工具区检索无结果时，会自动记下时间与关键词，供后续增补参考。</p>
+            <div class="row" style="gap:8px;margin-bottom:4px">
+              <button type="button" class="ghost" id="btnClearMiss">清空记录</button>
+              <span class="stats" id="missStats" style="margin:0"></span>
+            </div>
+            <ul class="fb-list" id="missList"></ul>
+          </div>
+          <div class="feedback-block">
+            <h3>留言窗口</h3>
+            <p class="fb-desc">写下想了解、但当前学习中心还没有的内容并提交；列表可查看或删除，便于后续增补。</p>
+            <textarea id="fbInput" rows="3" placeholder="例如：某国平台结算周期、某类商品证书、本地备案细节…" maxlength="800"></textarea>
+            <div class="row" style="gap:8px;margin-top:8px;align-items:center">
+              <button type="button" class="primary" id="btnFbSubmit">提交留言</button>
+              <span class="stats" id="fbStats" style="margin:0"></span>
+              <span class="fb-toast" id="fbToast" hidden></span>
+            </div>
+            <ul class="fb-list" id="fbList"></ul>
+          </div>
+        </div>
+        <p class="footer-note">用途说明：维护者可根据这些本地记录决定优先增补哪些章节；清除本站浏览器数据会一并消失，重要条目请自行截图或复制保存。</p>
+      </section>
+
     </main>
   </div>
 </div>
@@ -1321,6 +1378,89 @@ const listRelated=document.getElementById("listRelated");
 const listStats=document.getElementById("listStats");
 [listQ,listStatus,listRelated].forEach(el=>el.addEventListener("input",renderList));
 
+
+/* ---- 未匹配检索 + 留言（localStorage） ---- */
+const LS_MISS='cbec-miss-searches';
+const LS_FB='cbec-feedback-msgs';
+const LS_CAP=80;
+
+function lsRead(key){
+  try{ const raw=localStorage.getItem(key); const arr=raw?JSON.parse(raw):[]; return Array.isArray(arr)?arr:[]; }
+  catch(e){ return []; }
+}
+function lsWrite(key, arr){
+  try{ localStorage.setItem(key, JSON.stringify(arr.slice(0, LS_CAP))); }catch(e){}
+}
+function fmtTime(ts){
+  try{
+    const d=new Date(ts);
+    const p=n=>String(n).padStart(2,'0');
+    return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes());
+  }catch(e){ return String(ts); }
+}
+function recordMissSearch(q){
+  q=(q||'').trim();
+  if(!q) return;
+  const list=lsRead(LS_MISS);
+  const last=list[0];
+  if(last && last.q===q && (Date.now()-(last.t||0))<60000) return; // 1 分钟内同词不重复记
+  list.unshift({t:Date.now(), q:q.slice(0,120)});
+  lsWrite(LS_MISS, list);
+  renderMissList();
+}
+function renderMissList(){
+  const ul=document.getElementById('missList');
+  const st=document.getElementById('missStats');
+  if(!ul) return;
+  const list=lsRead(LS_MISS);
+  if(st) st.textContent=list.length?('共 '+list.length+' 条'):'暂无';
+  if(!list.length){ ul.innerHTML='<li class="empty-li">暂无未匹配记录。检索无结果时会自动出现在这里。</li>'; return; }
+  ul.innerHTML=list.map((it,i)=>'<li><span class="meta">'+esc(fmtTime(it.t))+'</span><span class="body">'+esc(it.q)+'</span><button type="button" class="del" data-i="'+i+'" aria-label="删除">删</button></li>').join('');
+  ul.querySelectorAll('button.del').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const i=+btn.getAttribute('data-i');
+      const arr=lsRead(LS_MISS); arr.splice(i,1); lsWrite(LS_MISS, arr); renderMissList();
+    });
+  });
+}
+function renderFbList(){
+  const ul=document.getElementById('fbList');
+  const st=document.getElementById('fbStats');
+  if(!ul) return;
+  const list=lsRead(LS_FB);
+  if(st) st.textContent=list.length?('共 '+list.length+' 条'):'暂无';
+  if(!list.length){ ul.innerHTML='<li class="empty-li">还没有留言。提交后会出现在下方列表。</li>'; return; }
+  ul.innerHTML=list.map((it,i)=>'<li><span class="meta">'+esc(fmtTime(it.t))+'</span><span class="body">'+esc(it.text)+'</span><button type="button" class="del" data-i="'+i+'" aria-label="删除">删</button></li>').join('');
+  ul.querySelectorAll('button.del').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const i=+btn.getAttribute('data-i');
+      const arr=lsRead(LS_FB); arr.splice(i,1); lsWrite(LS_FB, arr); renderFbList();
+    });
+  });
+}
+function wireFeedback(){
+  document.getElementById('btnClearMiss')?.addEventListener('click',()=>{
+    if(!lsRead(LS_MISS).length) return;
+    if(!confirm('确定清空全部未匹配检索记录？')) return;
+    lsWrite(LS_MISS, []);
+    renderMissList();
+  });
+  document.getElementById('btnFbSubmit')?.addEventListener('click',()=>{
+    const ta=document.getElementById('fbInput');
+    const text=(ta&&ta.value||'').trim();
+    if(!text){ ta?.focus(); return; }
+    const list=lsRead(LS_FB);
+    list.unshift({t:Date.now(), text:text.slice(0,800)});
+    lsWrite(LS_FB, list);
+    if(ta) ta.value='';
+    renderFbList();
+    const toast=document.getElementById('fbToast');
+    if(toast){ toast.hidden=false; toast.textContent='已保存到本机'; setTimeout(()=>{toast.hidden=true;},1600); }
+  });
+  renderMissList();
+  renderFbList();
+}
+
 /* ---- 提问 / 关键词检索 ---- */
 function buildSearchIndex(){
   const items=[];
@@ -1381,7 +1521,8 @@ function runSiteSearch(q){
   scored.forEach(x=>{ if(!seen.has(x.id+x.title)){ seen.add(x.id+x.title); uniq.push(x);} });
   const top=uniq.slice(0,12);
   if(!top.length){
-    panel.innerHTML='<div class="empty">没找到。试试：能不能退税 / 随州综试区 / 纸碗报检 / 越南代扣</div>';
+    recordMissSearch(q);
+    panel.innerHTML='<div class="empty">没找到（已记入底部「未匹配检索」）。试试：能不能退税 / 随州综试区 / 纸碗报检 / 越南代扣 · 也可到底部留言想了解的内容</div>';
     panel.classList.add('open');
     return;
   }
@@ -1457,6 +1598,7 @@ document.getElementById("btnCheck").addEventListener("click",runCheck);
 document.getElementById("btnResetQuiz").addEventListener("click",()=>{setDefaults();runCheck();});
 setupSideNav();
 wireSearch();
+wireFeedback();
 
 if(!window.EXPORT_LIST){document.getElementById("listStats").textContent="数据未加载，请重新下载完整单文件 HTML";}
 else{renderList();renderKB();setDefaults();runCheck();}
