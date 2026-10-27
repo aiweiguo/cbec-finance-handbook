@@ -54,15 +54,13 @@ a:hover{text-decoration:underline}
   position:sticky; top:0; z-index:30; backdrop-filter:saturate(180%) blur(16px);
   -webkit-backdrop-filter:saturate(180%) blur(16px);
   background:rgba(251,251,253,.82); border-bottom:1px solid var(--line);
-  padding:14px 36px;
+  padding:8px 36px;
 }
-.topbar .title{font-size:1.25rem; font-weight:650; letter-spacing:-.02em; margin:0}
-.topbar .sub{margin:4px 0 0; font-size:.82rem; color:var(--muted)}
-.chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
-.chip{
-  background:rgba(0,0,0,.04); border:1px solid var(--line); color:var(--muted);
-  padding:4px 10px; border-radius:999px; font-size:.75rem;
-}
+.topbar-inner{display:flex; align-items:center; gap:12px; min-height:44px}
+.topbar-brand{flex:0 1 auto; min-width:0}
+.topbar .title{font-size:1.05rem; font-weight:650; letter-spacing:-.02em; margin:0; line-height:1.25}
+.topbar .sub{margin:1px 0 0; font-size:.75rem; color:var(--muted); line-height:1.3}
+.topbar-search{flex:1 1 auto; min-width:140px; max-width:420px; margin-left:auto; position:relative}
 .main{padding:28px 36px 56px; max-width:980px}
 .panel{
   background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
@@ -86,7 +84,7 @@ a:hover{text-decoration:underline}
 .legend{display:flex; flex-wrap:wrap; gap:12px; font-size:.8rem; color:var(--muted); margin-top:14px}
 .row{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
 .toolbar{
-  position:sticky; top:64px; z-index:25; background:rgba(255,255,255,.92);
+  position:sticky; top:52px; z-index:25; background:rgba(255,255,255,.92);
   backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
   border:1px solid var(--line); border-radius:var(--radius-sm); padding:12px; margin:0 0 12px;
 }
@@ -149,7 +147,10 @@ details.sources summary{cursor:pointer; color:var(--muted); font-size:.85rem}
   .content{margin-left:0}
   .menu-btn{display:inline-flex}
   .main,.topbar{padding-left:18px; padding-right:18px}
+  .topbar-search{max-width:none; flex:1 1 160px}
+  .topbar .title{font-size:.95rem}
 }
+
 .footer-note{color:var(--muted); font-size:.78rem; margin-top:8px}
 
 
@@ -195,21 +196,17 @@ details.sources summary{cursor:pointer; color:var(--muted); font-size:.85rem}
 .tools-banner p{margin:0; color:var(--muted); font-size:.88rem}
 
 
-.search-bar{margin-top:12px; display:flex; flex-wrap:wrap; gap:8px; align-items:center}
+.search-bar{display:flex; gap:6px; align-items:center; margin:0}
 .search-bar input[type=search]{
-  flex:1 1 220px; min-width:180px; padding:11px 14px; border-radius:12px;
-  border:1px solid var(--line); background:#fff; font-size:.95rem; font-family:inherit;
+  flex:1 1 auto; min-width:0; padding:8px 12px; border-radius:10px;
+  border:1px solid var(--line); background:#fff; font-size:.88rem; font-family:inherit;
 }
 .search-bar input:focus{outline:none; border-color:rgba(0,113,227,.45); box-shadow:0 0 0 3px rgba(0,113,227,.15)}
-.faq-row{display:flex; flex-wrap:wrap; gap:6px; margin-top:8px}
-.faq-row button{
-  border:1px solid var(--line); background:rgba(0,0,0,.03); border-radius:999px;
-  padding:5px 11px; font-size:.78rem; cursor:pointer; font-family:inherit; color:var(--text);
-}
-.faq-row button:hover{background:var(--blue-soft); border-color:rgba(0,113,227,.25); color:var(--blue)}
+.topbar-search .search-bar button.primary{padding:8px 14px; font-size:.88rem; flex:0 0 auto}
 #searchPanel{
-  display:none; margin-top:10px; background:#fff; border:1px solid var(--line);
-  border-radius:14px; box-shadow:var(--shadow); max-height:320px; overflow:auto; padding:8px;
+  display:none; position:absolute; left:0; right:0; top:calc(100% + 6px); z-index:40;
+  background:#fff; border:1px solid var(--line);
+  border-radius:12px; box-shadow:var(--shadow); max-height:min(360px,50vh); overflow:auto; padding:6px;
 }
 #searchPanel.open{display:block}
 #searchPanel .hit{
@@ -220,6 +217,8 @@ details.sources summary{cursor:pointer; color:var(--muted); font-size:.85rem}
 #searchPanel .hit b{display:block; font-size:.9rem; margin-bottom:2px}
 #searchPanel .hit span{font-size:.78rem; color:var(--muted)}
 #searchPanel .empty{padding:12px; color:var(--muted); font-size:.88rem}
+.tools-banner .search-bar{margin-top:10px; flex-wrap:wrap}
+.tools-banner .search-bar input[type=search]{flex:1 1 220px; min-width:160px}
 .learn-path{counter-reset:lp}
 .learn-path li{margin:8px 0}
 
@@ -270,31 +269,16 @@ details.sources summary{cursor:pointer; color:var(--muted); font-size:.85rem}
 
   <div class="content">
     <div class="topbar">
-      <div class="row" style="align-items:flex-start">
+      <div class="topbar-inner">
         <button type="button" class="menu-btn" id="menuBtn" aria-label="菜单">菜单</button>
-        <div>
+        <div class="topbar-brand">
           <h1 class="title">随州网·跨境电商</h1>
           <p class="sub">财务学习手册</p>
-          <div class="chips">
-            <span class="chip">可提问检索</span>
-            <span class="chip">证据 A/B/C/D</span>
-          </div>
+        </div>
+        <div class="topbar-search">
           <div class="search-bar">
-            <input type="search" id="siteSearch" placeholder="提问或搜关键词：能不能退税、纸碗报检、随州综试区…" autocomplete="off" />
+            <input type="search" id="siteSearch" placeholder="提问或搜关键词…" autocomplete="off" />
             <button type="button" class="primary" id="btnSearch">检索</button>
-            <button type="button" class="ghost" id="btnClearSearch">清空</button>
-          </div>
-          <div class="faq-row" id="faqPresets">
-            <button type="button" data-q="能不能退税">能不能退税</button>
-            <button type="button" data-q="随州综试区">随州综试区</button>
-            <button type="button" data-q="纸碗报检">纸碗要不要报检</button>
-            <button type="button" data-q="9610 无票免税">9610 无票免税</button>
-            <button type="button" data-q="越南 公司 代扣">越南公司代扣吗</button>
-            <button type="button" data-q="锂电池 危运">锂电池怎么运</button>
-            <button type="button" data-q="出口退税率 查询">怎么查退税率</button>
-            <button type="button" data-q="专票 一般纳税人">专票和一般纳税人</button>
-            <button type="button" data-q="Lazada 代扣">Lazada 代扣吗</button>
-            <button type="button" data-q="产业园 综试区">产业园算综试区吗</button>
           </div>
           <div id="searchPanel" role="listbox" aria-label="检索结果"></div>
         </div>
@@ -900,7 +884,7 @@ details.sources summary{cursor:pointer; color:var(--muted); font-size:.85rem}
       <div class="tools-banner" id="tools">
         <h2>工具区（不打断上面的学习流程）</h2>
         <p>自查灯、禁限清单、资料卡片库单独放这里。也可用顶栏「提问检索」。手册改进说明见 <a href="#audit">自查报告</a>。</p>
-        <div class="search-bar" style="margin-top:10px">
+        <div class="search-bar">
           <input type="search" id="siteSearch2" placeholder="在工具区再搜一次…" />
           <button type="button" class="primary" id="btnSearch2">检索</button>
         </div>
@@ -1414,6 +1398,7 @@ function runSiteSearch(q){
       }
       // sync side nav active
       document.querySelectorAll('.side-nav a').forEach(a=>a.classList.toggle('active', a.getAttribute('href')==='#'+id));
+      panel.classList.remove('open');
     });
   });
 }
@@ -1421,26 +1406,25 @@ function runSiteSearch(q){
 function wireSearch(){
   const box=document.getElementById('siteSearch');
   const box2=document.getElementById('siteSearch2');
+  const panel=document.getElementById('searchPanel');
   const go=()=>runSiteSearch((box&&box.value)||'');
   document.getElementById('btnSearch')?.addEventListener('click', go);
-  box?.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); go(); }});
-  document.getElementById('btnClearSearch')?.addEventListener('click', ()=>{
-    if(box) box.value=''; if(box2) box2.value=''; runSiteSearch('');
+  box?.addEventListener('keydown', e=>{
+    if(e.key==='Enter'){ e.preventDefault(); go(); }
+    if(e.key==='Escape'){ if(box) box.value=''; runSiteSearch(''); }
   });
   document.getElementById('btnSearch2')?.addEventListener('click', ()=>{
     if(box && box2) box.value=box2.value;
     runSiteSearch(box2?.value||'');
-    document.getElementById('searchPanel')?.scrollIntoView({behavior:'smooth', block:'nearest'});
+    box?.focus();
   });
   box2?.addEventListener('keydown', e=>{
     if(e.key==='Enter'){ e.preventDefault(); document.getElementById('btnSearch2')?.click(); }
   });
-  document.querySelectorAll('#faqPresets button').forEach(b=>{
-    b.addEventListener('click', ()=>{
-      const q=b.getAttribute('data-q')||b.textContent;
-      if(box) box.value=q;
-      runSiteSearch(q);
-    });
+  document.addEventListener('click', e=>{
+    if(!panel || !panel.classList.contains('open')) return;
+    const wrap=document.querySelector('.topbar-search');
+    if(wrap && !wrap.contains(e.target)){ panel.classList.remove('open'); }
   });
   document.getElementById('btnFocusSearch')?.addEventListener('click', ()=>{
     box?.focus();
