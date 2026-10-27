@@ -1,0 +1,1442 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>随州网·跨境电商 财务学习手册</title>
+<style>
+
+:root{
+  --bg:#f5f5f7; --sidebar:#fbfbfd; --card:#ffffff; --text:#1d1d1f; --muted:#6e6e73;
+  --line:rgba(0,0,0,.08); --line2:rgba(0,0,0,.06);
+  --blue:#0071e3; --blue-soft:rgba(0,113,227,.1);
+  --fill:#f2f2f7; --warn-bg:#fff8e8; --warn:#8a5a00;
+  --red:#ff3b30; --yellow:#ff9f0a; --green:#34c759;
+  --a:#0071e3; --b:#5856d6; --c:#af52de; --d:#ff9500;
+  --radius:18px; --radius-sm:12px;
+  --shadow:0 1px 2px rgba(0,0,0,.04), 0 8px 24px rgba(0,0,0,.04);
+  --sidebar-w:248px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  background:var(--bg); color:var(--text); line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--blue); text-decoration:none}
+a:hover{text-decoration:underline}
+.app{display:flex; min-height:100vh}
+.sidebar{
+  position:fixed; left:0; top:0; bottom:0; width:var(--sidebar-w);
+  background:var(--sidebar); border-right:1px solid var(--line);
+  padding:28px 16px 24px; overflow:auto; z-index:40;
+}
+.brand{padding:0 10px 20px; border-bottom:1px solid var(--line2); margin-bottom:14px}
+.brand .mark{
+  width:36px; height:36px; border-radius:10px; background:linear-gradient(145deg,#0071e3,#64d2ff);
+  display:grid; place-items:center; color:#fff; font-weight:700; font-size:.95rem; margin-bottom:12px;
+}
+.brand h1{margin:0; font-size:1.05rem; font-weight:650; letter-spacing:-.02em}
+.brand p{margin:6px 0 0; font-size:.75rem; color:var(--muted); line-height:1.45}
+.side-label{font-size:.68rem; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; padding:10px 10px 6px}
+.side-nav{display:flex; flex-direction:column; gap:2px}
+.side-nav a{
+  display:block; padding:9px 12px; border-radius:10px; color:var(--text);
+  font-size:.88rem; text-decoration:none; border:none;
+}
+.side-nav a:hover{background:rgba(0,0,0,.04); text-decoration:none}
+.side-nav a.active{background:var(--blue-soft); color:var(--blue); font-weight:600}
+.side-foot{margin-top:18px; padding:12px 10px 0; border-top:1px solid var(--line2); font-size:.72rem; color:var(--muted); line-height:1.4}
+.content{margin-left:var(--sidebar-w); flex:1; min-width:0}
+.topbar{
+  position:sticky; top:0; z-index:30; backdrop-filter:saturate(180%) blur(16px);
+  -webkit-backdrop-filter:saturate(180%) blur(16px);
+  background:rgba(251,251,253,.82); border-bottom:1px solid var(--line);
+  padding:14px 36px;
+}
+.topbar .title{font-size:1.25rem; font-weight:650; letter-spacing:-.02em; margin:0}
+.topbar .sub{margin:4px 0 0; font-size:.82rem; color:var(--muted)}
+.chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
+.chip{
+  background:rgba(0,0,0,.04); border:1px solid var(--line); color:var(--muted);
+  padding:4px 10px; border-radius:999px; font-size:.75rem;
+}
+.main{padding:28px 36px 56px; max-width:980px}
+.panel{
+  background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+  box-shadow:var(--shadow); padding:28px; margin:0 0 22px;
+}
+.panel h2{margin:0 0 6px; font-size:1.35rem; font-weight:650; letter-spacing:-.02em}
+.panel .lead{margin:0 0 16px; color:var(--muted); font-size:.92rem}
+.cols{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:16px 0}
+@media(max-width:980px){.cols{grid-template-columns:1fr}}
+.box{background:var(--fill); border-radius:var(--radius-sm); padding:16px; border:1px solid transparent}
+.box h3{margin:0 0 6px; font-size:.95rem; font-weight:600}
+.box p{margin:0; font-size:.88rem; color:var(--muted)}
+.warn{background:var(--warn-bg); border:1px solid rgba(255,159,10,.25); padding:12px 14px; border-radius:var(--radius-sm); font-size:.9rem; color:var(--warn); margin:14px 0 0}
+.scene{background:var(--blue-soft); border:1px solid rgba(0,113,227,.18); border-radius:var(--radius-sm); padding:14px 16px; margin:0 0 16px; font-size:.92rem}
+.term{border-bottom:1.5px dashed var(--blue); color:var(--blue); font-weight:600; cursor:help; position:relative}
+.term:hover::after,.term:focus::after{
+  content:attr(data-tip); position:absolute; left:0; top:calc(100% + 8px); z-index:50;
+  width:min(340px,70vw); background:rgba(29,29,31,.94); color:#fff; padding:10px 12px;
+  border-radius:10px; font-size:.8rem; font-weight:400; line-height:1.45; white-space:normal;
+}
+.legend{display:flex; flex-wrap:wrap; gap:12px; font-size:.8rem; color:var(--muted); margin-top:14px}
+.row{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+.toolbar{
+  position:sticky; top:64px; z-index:25; background:rgba(255,255,255,.92);
+  backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  border:1px solid var(--line); border-radius:var(--radius-sm); padding:12px; margin:0 0 12px;
+}
+input[type=search],select,button,.quiz select{
+  padding:10px 12px; border:1px solid var(--line); border-radius:10px; font-size:.9rem;
+  background:#fff; font-family:inherit; color:var(--text);
+}
+input[type=search]:focus,select:focus{outline:none; border-color:rgba(0,113,227,.45); box-shadow:0 0 0 3px rgba(0,113,227,.15)}
+button{cursor:pointer}
+button.primary{background:var(--blue); color:#fff; border-color:var(--blue); font-weight:560}
+button.primary:hover{filter:brightness(1.05)}
+button.ghost{background:#fff}
+.stats{font-size:.8rem; color:var(--muted); margin:0 0 10px}
+.quiz-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+@media(max-width:760px){.quiz-grid{grid-template-columns:1fr}}
+.quiz label{display:block; font-size:.8rem; color:var(--muted); margin-bottom:5px}
+.quiz .field{background:var(--fill); border-radius:var(--radius-sm); padding:12px; border:1px solid var(--line2)}
+.light-box{margin-top:16px; border-radius:var(--radius); padding:18px; border:1px solid var(--line)}
+.light-box.green{background:#f2fbf4; border-color:rgba(52,199,89,.35)}
+.light-box.yellow{background:#fff9f0; border-color:rgba(255,159,10,.35)}
+.light-box.red{background:#fff5f5; border-color:rgba(255,59,48,.3)}
+.lights{font-size:1.35rem; letter-spacing:2px}
+.todo{margin:8px 0 0; padding-left:1.15rem}
+.todo li{margin:6px 0}
+.table-wrap{overflow:auto; border:1px solid var(--line); border-radius:var(--radius-sm)}
+table.list{width:100%; border-collapse:collapse; font-size:.86rem; min-width:760px}
+table.list th,table.list td{border-bottom:1px solid var(--line2); padding:12px 10px; text-align:left; vertical-align:top}
+table.list th{font-size:.75rem; color:var(--muted); background:var(--fill); position:sticky; top:0; font-weight:600}
+.st{display:inline-block; font-size:.7rem; font-weight:700; padding:3px 8px; border-radius:999px; color:#fff}
+.st.allow{background:var(--green)}.st.restrict{background:#ff6500}.st.license{background:var(--blue)}
+.st.forbid{background:var(--red)}.st.watch{background:var(--yellow); color:#1d1d1f}
+.src a{display:inline-block; margin:2px 6px 2px 0; font-size:.76rem; word-break:break-all}
+.card{border:1px solid var(--line); border-radius:var(--radius); padding:18px; margin:12px 0; background:#fff}
+.card h3{margin:0 0 8px; font-size:1.05rem; font-weight:620; letter-spacing:-.01em; padding-right:72px}
+.tags{display:flex; flex-wrap:wrap; gap:6px; margin:6px 0 10px}
+.tag{font-size:.7rem; padding:3px 8px; border-radius:999px; background:var(--fill); color:var(--muted); border:1px solid var(--line2)}
+.tag.topic-合规{background:#e8f8ee; color:#248a3d; border-color:transparent}
+.tag.topic-退税{background:#fff1e0; color:#9a3412; border-color:transparent}
+.tag.topic-报税{background:#eef; color:#3634a3; border-color:transparent}
+.tag.topic-概念{background:#f5e9ff; color:#7b2cbf; border-color:transparent}
+.level{font-size:.7rem; font-weight:700; padding:4px 8px; border-radius:8px; color:#fff; float:right}
+.level.A{background:var(--a)}.level.B{background:var(--b)}.level.C{background:var(--c)}.level.D{background:var(--d)}
+.official{background:#f2f8ff; border:1px solid rgba(0,113,227,.18); border-radius:var(--radius-sm); padding:10px 12px; margin-top:12px; font-size:.84rem}
+.youdo{background:var(--fill); border-radius:var(--radius-sm); padding:10px 12px; font-size:.9rem}
+.example{background:var(--fill); border:1px dashed rgba(0,0,0,.12); border-radius:var(--radius-sm); padding:12px; font-size:.9rem; margin:10px 0}
+.steps{margin:8px 0; padding-left:1.15rem}.steps li{margin:5px 0}
+details.sources summary{cursor:pointer; color:var(--muted); font-size:.85rem}
+.source-list{list-style:none; padding:0; margin:8px 0 0}
+.source-list li{background:var(--fill); border-radius:10px; padding:10px; margin-bottom:6px; font-size:.82rem}
+.hl{background:#fff8e8 !important}
+.hl td:first-child{box-shadow:inset 3px 0 0 var(--yellow)}
+.evidence-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:12px}
+@media(max-width:700px){.evidence-grid{grid-template-columns:1fr}}
+.ev{background:var(--fill); border-radius:var(--radius-sm); padding:14px}
+.ev b{display:inline-block; min-width:1.4rem}
+.menu-btn{display:none; border:1px solid var(--line); background:#fff; border-radius:10px; padding:8px 12px; margin-right:10px}
+@media(max-width:900px){
+  .sidebar{transform:translateX(-105%); transition:transform .2s ease}
+  .sidebar.open{transform:none}
+  .content{margin-left:0}
+  .menu-btn{display:inline-flex}
+  .main,.topbar{padding-left:18px; padding-right:18px}
+}
+.footer-note{color:var(--muted); font-size:.78rem; margin-top:8px}
+
+
+.side-label{margin-top:6px}
+.step{
+  border:1px solid var(--line); border-radius:var(--radius-sm);
+  padding:16px; margin:12px 0; background:var(--fill);
+}
+.step h3{margin:0 0 8px; font-size:1.02rem; font-weight:620}
+.step .do{margin:0; font-size:.92rem}
+.step .meta-grid{
+  display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-top:10px;
+}
+@media(max-width:800px){.step .meta-grid{grid-template-columns:1fr}}
+.step .meta-grid > div{
+  background:#fff; border:1px solid var(--line2); border-radius:10px; padding:10px; font-size:.84rem;
+}
+.step .meta-grid b{display:block; color:var(--muted); font-size:.72rem; font-weight:600; margin-bottom:4px}
+.flow-num{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:22px; height:22px; border-radius:50%; background:var(--blue); color:#fff;
+  font-size:.75rem; font-weight:700; margin-right:6px; vertical-align:middle;
+}
+.tool-callout{
+  display:flex; flex-wrap:wrap; gap:8px; align-items:center;
+  background:var(--blue-soft); border:1px solid rgba(0,113,227,.18);
+  border-radius:12px; padding:10px 12px; margin:12px 0; font-size:.88rem;
+}
+.tool-callout a.btnish{
+  display:inline-block; background:var(--blue); color:#fff !important; text-decoration:none;
+  padding:6px 12px; border-radius:999px; font-size:.82rem; font-weight:600;
+}
+.tool-callout a.btnish:hover{filter:brightness(1.05); text-decoration:none}
+.glossary details{margin:8px 0; background:var(--fill); border-radius:10px; padding:8px 12px; border:1px solid var(--line2)}
+.glossary summary{cursor:pointer; font-weight:600; font-size:.92rem}
+.glossary p{margin:6px 0 0; font-size:.88rem; color:var(--muted)}
+.tools-banner{
+  background:linear-gradient(135deg, rgba(0,113,227,.08), rgba(100,210,255,.12));
+  border:1px solid rgba(0,113,227,.15); border-radius:var(--radius);
+  padding:16px 18px; margin:28px 0 16px;
+}
+.tools-banner h2{margin:0 0 4px; font-size:1.15rem}
+.tools-banner p{margin:0; color:var(--muted); font-size:.88rem}
+
+
+.search-bar{margin-top:12px; display:flex; flex-wrap:wrap; gap:8px; align-items:center}
+.search-bar input[type=search]{
+  flex:1 1 220px; min-width:180px; padding:11px 14px; border-radius:12px;
+  border:1px solid var(--line); background:#fff; font-size:.95rem; font-family:inherit;
+}
+.search-bar input:focus{outline:none; border-color:rgba(0,113,227,.45); box-shadow:0 0 0 3px rgba(0,113,227,.15)}
+.faq-row{display:flex; flex-wrap:wrap; gap:6px; margin-top:8px}
+.faq-row button{
+  border:1px solid var(--line); background:rgba(0,0,0,.03); border-radius:999px;
+  padding:5px 11px; font-size:.78rem; cursor:pointer; font-family:inherit; color:var(--text);
+}
+.faq-row button:hover{background:var(--blue-soft); border-color:rgba(0,113,227,.25); color:var(--blue)}
+#searchPanel{
+  display:none; margin-top:10px; background:#fff; border:1px solid var(--line);
+  border-radius:14px; box-shadow:var(--shadow); max-height:320px; overflow:auto; padding:8px;
+}
+#searchPanel.open{display:block}
+#searchPanel .hit{
+  display:block; width:100%; text-align:left; border:0; background:transparent;
+  padding:10px 12px; border-radius:10px; cursor:pointer; font-family:inherit; color:var(--text);
+}
+#searchPanel .hit:hover{background:var(--fill)}
+#searchPanel .hit b{display:block; font-size:.9rem; margin-bottom:2px}
+#searchPanel .hit span{font-size:.78rem; color:var(--muted)}
+#searchPanel .empty{padding:12px; color:var(--muted); font-size:.88rem}
+.learn-path{counter-reset:lp}
+.learn-path li{margin:8px 0}
+
+
+.brand{display:flex; align-items:flex-start; gap:10px}
+.brand .brand-text{min-width:0}
+.brand .brand-name{font-size:.95rem; font-weight:650; letter-spacing:.02em; margin:0 0 2px}
+.brand h1{font-size:.88rem; font-weight:600; line-height:1.35; margin:0; color:var(--text)}
+.brand p{margin:4px 0 0; font-size:.72rem; color:var(--muted)}
+
+</style>
+</head>
+<body>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-text">
+        <div class="brand-name">随州网·跨境电商</div>
+        <h1>财务学习手册</h1>
+      </div>
+    </div>
+    <div class="side-label">学习流程</div>
+    <nav class="side-nav">
+      <a href="#learn-how" class="active">怎么自学（先看）</a>
+      <a href="#s0">0. 先搞懂在干什么</a>
+      <a href="#s1">1. 钱和税怎么走</a>
+      <a href="#s2">2. 能不能卖/出口</a>
+      <a href="#s3">3. 选出口模式</a>
+      <a href="#s3b">3b. 随州综试区核查</a>
+      <a href="#s4">4. 票证与备案</a>
+      <a href="#s5">5. 出口退税怎么做</a>
+      <a href="#s6">6. 东南亚怎么报税</a>
+      <a href="#s7">7. 三类品财务注意</a>
+      <a href="#s8">8. 复盘清单</a>
+      <a href="#glossary">名词小词典</a>
+      <a href="#evidence">来源与证据</a>
+      <a href="#audit">手册自查报告</a>
+    </nav>
+    <div class="side-label">工具</div>
+    <nav class="side-nav">
+      <a href="#checker">自查灯</a>
+      <a href="#export-list">禁限可查清单</a>
+      <a href="#archive">资料卡片库</a>
+    </nav>
+    <div class="side-foot">2026-10-27</div>
+  </aside>
+
+  <div class="content">
+    <div class="topbar">
+      <div class="row" style="align-items:flex-start">
+        <button type="button" class="menu-btn" id="menuBtn" aria-label="菜单">菜单</button>
+        <div>
+          <h1 class="title">随州网·跨境电商</h1>
+          <p class="sub">财务学习手册</p>
+          <div class="chips">
+            <span class="chip">可提问检索</span>
+            <span class="chip">证据 A/B/C/D</span>
+          </div>
+          <div class="search-bar">
+            <input type="search" id="siteSearch" placeholder="提问或搜关键词：能不能退税、纸碗报检、随州综试区…" autocomplete="off" />
+            <button type="button" class="primary" id="btnSearch">检索</button>
+            <button type="button" class="ghost" id="btnClearSearch">清空</button>
+          </div>
+          <div class="faq-row" id="faqPresets">
+            <button type="button" data-q="能不能退税">能不能退税</button>
+            <button type="button" data-q="随州综试区">随州综试区</button>
+            <button type="button" data-q="纸碗报检">纸碗要不要报检</button>
+            <button type="button" data-q="9610 无票免税">9610 无票免税</button>
+            <button type="button" data-q="越南 公司 代扣">越南公司代扣吗</button>
+            <button type="button" data-q="锂电池 危运">锂电池怎么运</button>
+            <button type="button" data-q="出口退税率 查询">怎么查退税率</button>
+            <button type="button" data-q="专票 一般纳税人">专票和一般纳税人</button>
+          </div>
+          <div id="searchPanel" role="listbox" aria-label="检索结果"></div>
+        </div>
+      </div>
+    </div>
+
+    <main class="main">
+
+      <section class="panel" id="learn-how">
+        <h2>怎么自学这本手册（建议 40 分钟路径）</h2>
+        <p class="lead">你不用一次读完。按下面顺序点，卡了就用顶栏搜索提问。</p>
+        <div class="step">
+          <h3>推荐路径</h3>
+          <ol class="learn-path todo">
+            <li><b>5 分钟</b>：读 <a href="#s0">第 0 步</a> + <a href="#s1">第 1 步</a>，搞懂「卖货 / 出关 / 做账」和三种「税」别混。</li>
+            <li><b>10 分钟</b>：<a href="#s2">能不能出口</a> → 打开 <a href="#export-list">禁限清单</a> 搜自己的品；再看 <a href="#s3">出口模式</a> 与 <a href="#s3b">随州综试区</a>。</li>
+            <li><b>15 分钟</b>：<a href="#s4">票证备案</a> + <a href="#s5">退税步骤与查退税率</a> —— 这是财务核心。</li>
+            <li><b>10 分钟</b>：<a href="#s6">东南亚对账（越南个体/公司）</a> + <a href="#s7">三类品财务注意</a> + <a href="#s8">复盘清单</a>。</li>
+            <li><b>随时</b>：顶栏输入问题检索；或跑一遍 <a href="#checker">自查灯</a>。</li>
+          </ol>
+        </div>
+        <div class="step">
+          <h3>自学小技巧</h3>
+          <ol class="todo">
+            <li>看见蓝色虚线词，鼠标悬停看大白话。</li>
+            <li>每章都有「你做什么 / 找谁 / 准备什么」——读完就照着列一张纸。</li>
+            <li>官方链接点开留存书签；税率数字以查询当天为准，手册不编造。</li>
+            <li>工具区不打断正文：自查灯、禁限清单、卡片库在左侧「工具」。</li>
+          </ol>
+        </div>
+        <div class="tool-callout">
+          <a class="btnish" href="#s0">从第 0 步开始</a>
+          <a class="btnish" href="#checker">先测自查灯</a>
+          <button type="button" class="btnish" id="btnFocusSearch" style="border:0">去顶栏提问检索</button>
+        </div>
+      </section>
+
+      <!-- 0 -->
+      <section class="panel" id="s0">
+        <h2><span class="flow-num">0</span>先搞懂：你在干什么</h2>
+        <p class="lead">别一上来就背「9610」「一般纳税人」。先用大白话看清整件事。</p>
+        <div class="scene">
+          <b>一句话：</b>你在中国备货，通过 TikTok Shop / Shopee / Lazada 卖给东南亚买家；货寄出去，平台把货款结算给你；中间中国要管「出关 + 可能退税」，国外要管「销售税/增值税或平台代扣」。
+        </div>
+        <div class="step">
+          <h3>跨境电商卖货 = 三件事叠在一起</h3>
+          <ol class="todo">
+            <li><b>卖</b>：在平台上架、接单（经营动作）</li>
+            <li><b>出</b>：货物离开中国（海关报关 / 清单）</li>
+            <li><b>账</b>：钱怎么进公司账户、税怎么算、票怎么留（财务动作）</li>
+          </ol>
+          <p class="do" style="margin-top:8px">这本手册主要教第 3 件，但第 2 件不过关，账也做不下去——所以前面会有「能不能出口」。</p>
+        </div>
+        <div class="step">
+          <h3>你现在要记住的唯一目标</h3>
+          <p class="do">学会问自己：<b>这单货用什么方式出的中国？有没有增值税专用发票？平台结算单上的扣税是不是另一回事？</b>能分清这三问，后面章节才不晕。</p>
+        </div>
+        <div class="step">
+          <div class="meta-grid">
+            <div><b>你做什么</b>用自己的话复述：我在哪个平台卖什么货、钱大概怎么进账户</div>
+            <div><b>找谁</b>先自己想清楚；卡住再问会计/货代「我们现在怎么出货的」</div>
+            <div><b>准备什么</b>一张平台店铺后台截图 + 最近一笔结算单（有更好）</div>
+          </div>
+        </div>
+        <div class="tool-callout">学到卡点时再用工具：
+          <a class="btnish" href="#checker">打开自查灯</a>
+          <a class="btnish" href="#export-list">查禁限清单</a>
+          <a class="btnish" href="#glossary">看名词小词典</a>
+          <a class="btnish" href="#s1">下一章：钱和税</a>
+        </div>
+      </section>
+
+      <!-- 1 -->
+      <section class="panel" id="s1">
+        <h2><span class="flow-num">1</span>钱怎么走、税大概指什么</h2>
+        <p class="lead">财务入门：先分清「货款」和「税」不是一回事；中国税和国外税也不是一回事。</p>
+        <div class="step">
+          <h3>钱大概怎么走（简化）</h3>
+          <ol class="todo">
+            <li>买家在平台付款 → 钱先在平台/支付通道里</li>
+            <li>平台扣佣金、可能代扣当地税 → 剩余结算到你的收款账户</li>
+            <li>你在中国侧还有采购付款、运费、报关费等成本和进项票</li>
+          </ol>
+        </div>
+        <div class="step">
+          <h3>「税」在这本手册里常见有三种（别混）</h3>
+          <ol class="todo">
+            <li><b><span class="term" tabindex="0" data-tip="货物合法出口后，把你在国内采购时已经交过的增值税（有时还有消费税），按规定退还给你或免掉。这是中国对出口企业的政策。">出口退税</span></b>：中国把你国内已交的一部分增值税退回来（有条件）。影响现金流。</li>
+            <li><b>境外销售税 / <span class="term" tabindex="0" data-tip="Value Added Tax，很多国家对商品销售征的增值税。东南亚各国名字可能是 VAT 或 GST，规则不同。">VAT</span>（增值税）</b>：卖到国外时，销售国可能要税；有的由平台从货款里代扣。</li>
+            <li><b>企业所得税等</b>：公司赚了利润后在中国要交的税（本手册不展开细节，但无票免税时可能有核定征收等规则）。</li>
+          </ol>
+          <div class="example"><strong>例子：</strong>纸碗卖到越南。平台可能代扣越南税（你账户少一截）；同时这批货若在中国合法出口且有专票，你还可能另办中国出口退税。两边分开算。</div>
+        </div>
+        <div class="step">
+          <h3>这一步你做什么</h3>
+          <p class="do"><span class="term" tabindex="0" data-tip="平台定期把买家付款扣掉佣金、可能还有代扣税之后，打给你的那张账单/明细。">结算单</span>上常有：销售额、<span class="term" tabindex="0" data-tip="平台抽成，比如按成交额收百分之几的服务费。">佣金</span>、代扣税、实际到账——先会圈这四项。</p>
+          <div class="meta-grid">
+            <div><b>你做什么</b>打开最近一笔平台结算单，圈出：销售额、佣金、代扣税、实际到账</div>
+            <div><b>找谁</b>平台卖家中心「财务/结算」；不懂就问会计或代理</div>
+            <div><b>准备什么</b>一张结算截图 + 对应订单号，后面学对账要用</div>
+          </div>
+        </div>
+        <div class="tool-callout">概念不清先查词典，然后继续：
+          <a class="btnish" href="#glossary">名词小词典</a>
+          <a class="btnish" href="#s2">下一章：能不能出口</a>
+        </div>
+      </section>
+
+      <!-- 2 -->
+      <section class="panel" id="s2">
+        <h2><span class="flow-num">2</span>能不能卖 / 能不能出口</h2>
+        <p class="lead">财务开干前的关：货不合法，退税申报和平台收款都可能出问题。</p>
+        <div class="step">
+          <h3>怎么判断（大白话）</h3>
+          <ol class="todo">
+            <li>是不是国家禁止出口的东西（濒危、特定化学品等）→ 直接不能做</li>
+            <li>要不要出口许可证 / 两用物项许可 → 没证不能出</li>
+            <li>是不是危险运输货（锂电池、气雾罐、灭火器）→ 能卖也要按危运规则，成本更高</li>
+            <li>有没有商标侵权 → 平台封店 + 海关风险</li>
+          </ol>
+          <p class="do">你们三类货：普通工具 / 无电应急配件 / 纸碗 —— 多数不是整类禁止；重点盯锂电应急电源、气雾灭火器、开刃刀具、假品牌、纸碗食品接触质量。</p>
+        </div>
+        <div class="tool-callout">不要死记目录，用工具查：
+          <a class="btnish" href="#export-list">打开禁限可查清单</a>
+          <span style="color:var(--muted)">搜「锂电」「纸碗」「刀具」</span>
+        </div>
+        <div class="step">
+          <div class="meta-grid">
+            <div><b>你做什么</b>把在售 SKU 列成表：品名、是否含电池/气雾/刀具、品牌是否自有</div>
+            <div><b>找谁</b>货代（运输限制）、属地海关（归类疑问）、平台违禁品页</div>
+            <div><b>准备什么</b>产品说明书/照片、成分或电池参数、商标授权书（如有）</div>
+          </div>
+        </div>
+        <div class="official">官方入口：
+          <a href="https://www.mofcom.gov.cn/zcfb/dwmygl/art/2023/art_07c75ecad2a648fbad6179dc9e2bf763.html" target="_blank" rel="noopener">禁止出口目录公告</a> ·
+          <a href="https://www.mofcom.gov.cn/zfxxgk/gkml/art/2025/art_3043acb423c042b895e426b5ed6fa4e5.html" target="_blank" rel="noopener">出口许可证目录 2026</a> ·
+          <a href="https://www.gov.cn/zhengce/zhengceku/2018-12/31/content_5447414.htm" target="_blank" rel="noopener">海关总署 2018 年 194 号</a>
+          <span style="color:var(--muted)"> · 证据 A · 本页检索日已可打开</span>
+        </div>
+        <div class="tool-callout">货的风险摸清后：
+          <a class="btnish" href="#export-list">再用禁限清单细查 SKU</a>
+          <a class="btnish" href="#s3">下一章：选出口模式</a>
+        </div>
+      </section>
+
+      <!-- 3 -->
+      <section class="panel" id="s3">
+        <h2><span class="flow-num">3</span>选出口模式（决定你后面怎么退税）</h2>
+        <p class="lead">海关用几个数字代码区分出货方式。选错了，财务对账和退税路径会对不上。</p>
+        <div class="step">
+          <h3>四种常见说法（先记场景，再记数字）</h3>
+          <ol class="todo">
+            <li><b>小包直邮给个人买家</b> → 常碰 <span class="term" tabindex="0" data-tip="跨境电商零售出口的海关监管方式代码，多是平台小包寄给国外个人。">9610</span></li>
+            <li><b>卖给境外公司</b> → 常碰 <span class="term" tabindex="0" data-tip="跨境电商 B2B 直接出口：货发给境外企业，不是个人消费者。">9710</span></li>
+            <li><b>先堆海外仓再卖</b> → 常碰 <span class="term" tabindex="0" data-tip="出口到海外仓备货，再从仓发给买家。">9810</span></li>
+            <li><b>传统一般贸易出货</b> → 常碰 <span class="term" tabindex="0" data-tip="一般贸易最常见的海关监管方式代码，很多整柜/拼柜出货用它。">0110</span></li>
+          </ol>
+          <div class="example"><strong>对财务的影响：</strong>9610 在综试区符合条件可能「无票免税」（不退税，只是出口环节免增值税）；9710/9810/0110 更常走「有票退税」。无票免税扩不到 9710/9810——这是税务机关公开答复口径。</div>
+        </div>
+        <div class="step">
+          <p class="do"><span class="term" tabindex="0" data-tip="帮你订舱、清关、把货寄到国外的物流服务商。很多跨境卖家日常出货都靠货代。">货代</span>手里通常能看到监管方式代码；也可以看
+          <span class="term" tabindex="0" data-tip="向海关申报出口时形成的单证/电子信息，上面有品名、数量、金额、监管方式等，退税常要和它核对。">报关单</span>
+          或跨境电商申报清单。</p>
+          <div class="meta-grid">
+            <div><b>你做什么</b>问清货代/报关行：你现在每票货报的是哪个监管方式代码</div>
+            <div><b>找谁</b>货代、报关行；综试区政策见 <a href="#s3b">3b 随州核查</a>；湖北武汉/黄石等有公开问答</div>
+            <div><b>准备什么</b>最近一份报关单或申报清单复印件/截图</div>
+          </div>
+        </div>
+        <div class="tool-callout">
+          <a class="btnish" href="#checker">不确定资质？先跑自查灯</a>
+          <a class="btnish" href="#s4">下一章：票证与备案</a>
+        </div>
+        <div class="official">官方：
+          <a href="https://www.gov.cn/zhengce/zhengceku/2019-10/17/content_5441297.htm" target="_blank" rel="noopener">财税〔2018〕103 号（9610 综试区无票免税）</a> ·
+          <a href="http://zhejiang.chinatax.gov.cn/art/2024/10/16/art_23318_634415.html" target="_blank" rel="noopener">浙江税务：无票免税不宜扩至 9710/9810</a> ·
+          <a href="https://www.gov.cn/zhengce/zhengceku/202501/content_7001563.htm" target="_blank" rel="noopener">税务总局 2025 年第 3 号（9810 预退税）</a>
+        </div>
+      </section>
+
+
+      <section class="panel" id="s3b">
+        <h2><span class="flow-num">3b</span>随州是不是综试区？（决定你能不能「无票免税」）</h2>
+        <p class="lead">「无票免税」主要给<span class="term" tabindex="0" data-tip="经国务院批复设立的跨境电子商务综合试验区城市。只有在综试区注册并按规定走零售出口，才可能适用财税〔2018〕103号无票免税。">综试区</span>里的跨境电商零售出口。公司在随州，先查清自己算不算。</p>
+        <div class="scene">
+          <b>结论（检索日 2026-10-27）：</b>在已公开的国务院批复名单中，<strong>未见「随州市」</strong>。湖北已见批复的综试区城市包括：
+          <b>武汉</b>（2018）、<b>黄石</b>（2019 第四批）、<b>襄阳</b>（2022）、<b>鄂州</b>（2025）等。随州若要享受综试区无票免税，一般需要把经营主体注册到综试区城市，或确认当地另有书面政策——不能想当然。
+        </div>
+        <div class="step">
+          <h3>官方依据（点开核对原文城市名单）</h3>
+          <ol class="todo">
+            <li><a href="https://www.gjxfj.gov.cn/gjxfj/fgwj/gwywj/webinfo/2018/08/1590610502648612.htm" target="_blank" rel="noopener">国函〔2018〕93号</a>：含武汉等 · 证据 A</li>
+            <li><a href="https://www.gov.cn/zhengce/zhengceku/2019-12/24/content_5463598.htm" target="_blank" rel="noopener">国函〔2019〕137号</a>：含黄石等 24 城 · 证据 A</li>
+            <li><a href="https://www.gov.cn/zhengce/zhengceku/2022-02/08/content_5672535.htm" target="_blank" rel="noopener">国函〔2022〕8号</a>：含襄阳等 · 证据 A</li>
+            <li><a href="https://www.gov.cn/zhengce/zhengceku/202504/content_7020995.htm" target="_blank" rel="noopener">国函〔2025〕40号</a>：含鄂州等 · 证据 A</li>
+            <li>黄石本地综试区说明（对照用）：<a href="http://sww.huangshi.gov.cn/wzsdw/kjdszsq/zsqjs/" target="_blank" rel="noopener">黄石市商务局综试区介绍</a></li>
+          </ol>
+        </div>
+        <div class="step">
+          <h3>若你坚持在随州经营：怎么向属地确认</h3>
+          <div class="meta-grid">
+            <div><b>你做什么</b>打电话/上门问清：「我市是否综试区？无票免税能否办？若不能，退税要走哪条」</div>
+            <div><b>找谁</b>随州市商务局（或行政审批/外贸科）、主管税务机关、当地海关/综服平台运维</div>
+            <div><b>准备什么</b>营业执照地址页；请对方书面或邮件答复并留存</div>
+          </div>
+          <div class="example"><strong>财务含义：</strong>不在综试区 → 别指望 9610「无票免税」；应优先「一般纳税人 + 专票 + 规范报关」冲退税，或评估是否到武汉/黄石等综试区注册主体。</div>
+        </div>
+        <div class="tool-callout">
+          <a class="btnish" href="#s4">下一章：票证与备案</a>
+          <a class="btnish" href="#s5">或直接看退税怎么做</a>
+        </div>
+      </section>
+
+      <!-- 4 -->
+      <section class="panel" id="s4">
+        <h2><span class="flow-num">4</span>票证与备案（财务真正开工）</h2>
+        <p class="lead">想退税，先把「公司身份」和「进项票」准备好。这章是做账基础。</p>
+        <div class="step">
+          <h3>你至少要弄清这几张「身份证」</h3>
+          <ol class="todo">
+            <li><b>营业执照公司</b>（个体户也能做部分业务，但退税实务里公司更常见）</li>
+            <li><b>海关备案</b>（自己名义报关需要）</li>
+            <li><b><span class="term" tabindex="0" data-tip="增值税里的一种纳税人类型。一般纳税人通常可以开/收增值税专用发票，也是出口退税常见前提之一。">一般纳税人</span></b>（对比：
+              <span class="term" tabindex="0" data-tip="另一种增值税纳税人，通常不能像一般纳税人那样随便取得专票进项去退税；很多出口退税路径会要求你先升级为一般纳税人。">小规模纳税人</span>往往更难走有票退税）</li>
+            <li><b>出口退（免）税备案</b>（第一次申报退税前向税务办理）</li>
+            <li><b><span class="term" tabindex="0" data-tip="增值税专用发票。上面单独列税额，外贸企业退税常常就靠它证明你采购时交过税。">增值税专用发票</span>（专票）</b>：向工厂/供应商要</li>
+            <li><b><span class="term" tabindex="0" data-tip="中国国际贸易单一窗口：网上办理报关、跨境电商清单、部分退税申报的一站式网站/系统。">单一窗口</span></b>账号（报关/退税常用入口之一）</li>
+          </ol>
+        </div>
+        <div class="step">
+          <div class="meta-grid">
+            <div><b>你做什么</b>列清单打勾：海关备案？一般纳税人？能不能稳定拿到专票？退税备案做了没？</div>
+            <div><b>找谁</b>主管税务机关（电子税务局）、属地海关/报关行、供应商财务</div>
+            <div><b>准备什么</b>营业执照、开户许可/基本户信息、供应商专票样张</div>
+          </div>
+        </div>
+        <div class="tool-callout">不确定自己缺哪一项：
+          <a class="btnish" href="#checker">用自查灯测一遍</a>
+          <a class="btnish" href="#s5">下一章：出口退税怎么做</a>
+        </div>
+        <div class="official">官方：
+          <a href="https://www.gov.cn/zhengce/zhengceku/202602/content_7056762.htm" target="_blank" rel="noopener">税务总局 2026 年第 5 号（退税管理办法·备案申报）</a>
+          <span style="color:var(--muted)"> · 证据 A · 已核对可打开</span>
+        </div>
+      </section>
+
+      <!-- 5 -->
+      <section class="panel" id="s5">
+        <h2><span class="flow-num">5</span>出口退税怎么做（按顺序执行）</h2>
+        <p class="lead">核心财务章。先满足条件，再按步骤申报。数字税率请自己用官方查询，手册不编造。</p>
+        <div class="step">
+          <h3>能不能退：四个基本条件（货物）</h3>
+          <ol class="todo">
+            <li>卖给境外单位或个人</li>
+            <li>向海关报关并实际离境</li>
+            <li>会计上做销售</li>
+            <li>按规定收汇（外汇收到合规）</li>
+          </ol>
+          <p class="do">另外：外贸企业通常要有匹配的专票等
+          <span class="term" tabindex="0" data-tip="你采购时发票上的税额，将来可能用来抵自己的销项税，或在出口退税里退回来。">进项税额</span>凭证；
+          生产企业常用「<span class="term" tabindex="0" data-tip="出口免征销项增值税，进项税先抵顶内销应纳税，剩下来再退给你。生产企业常用。">免抵退</span>」；
+          外贸企业常用「<span class="term" tabindex="0" data-tip="出口免征销项，再按规则把对应进项税额退还给你。外贸公司买货出口常用。">免退税</span>」——细节问会计，先抓住「有票 + 报关 + 收汇」。</p>
+        </div>
+        <div class="step">
+          <h3>完整步骤（照着做）</h3>
+          <ol class="todo">
+            <li><b>备案</b> — 找主管税务机关 / 电子税务局；准备备案表</li>
+            <li><b>拿专票</b> — 找供应商；核对品名数量尽量与报关一致</li>
+            <li><b>报关离境</b> — 找货代报关行；拿到报关信息</li>
+            <li><b>收汇</b> — 找银行；原则上报关出口次年 4 月 30 日前（有例外规则）</li>
+            <li><b>网上申报退税</b> — 电子税务局或单一窗口</li>
+            <li><b>留存单证</b> — 合同、运单、委托报关等备查</li>
+          </ol>
+        </div>
+        <div class="step">
+          <h3>模式差异（财务决策）</h3>
+          <div class="example">
+            · <b>有专票</b>：优先冲退税（0110/9610/9710/9810 都可能，看是否符合条件）。<br>
+            · <b>没专票 + 在综试区 + 9610</b>：研究「无票免税」（免的是出口环节增值税，不是退一笔钱到账）。<br>
+            · <b>9810 海外仓</b>：可了解「离境预退、销售再核算」。
+          </div>
+          <div class="meta-grid">
+            <div><b>你做什么</b>选一条路径：有票退税 or 综试区免税，写进财务制度</div>
+            <div><b>找谁</b>主管税务机关、出口退税代理、综试办</div>
+            <div><b>准备什么</b>专票、报关单、收汇水单、海外仓证明（9810）</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <h3>出口退税率怎么查（逐步点）</h3>
+          <p class="do">手册<strong>不写死</strong>你们纸碗/工具的退税率数字——以查询当天文库为准。</p>
+          <ol class="todo">
+            <li>打开国家税务总局网站纳税服务相关入口，或直接看官方说明：
+              <a href="https://www.chinatax.gov.cn/chinatax/c102449/c5244920/content.html" target="_blank" rel="noopener">生产企业出口退税率是多少？（含查询路径）</a></li>
+            <li><b>方法一（官网）</b>：税务总局官网 → 【纳税服务】→ 【出口退税率查询】→ 输入商品代码或商品名称。</li>
+            <li><b>方法二（电子税务局）</b>：登录电子税务局 → 【我要查询】→ 【出口退税信息查询】→ 【出口商品退税率查询】→ 输入商品代码/名称。</li>
+            <li>看结果：退税率不为 0 且无「禁止出口/出口不退税」等特殊标志时，通常才按退税商品申报；若显示免税或禁止出口/不退税，账务处理完全不同——拿截图问会计。</li>
+            <li>退税率调整以<strong>报关单上的出口日期</strong>为准（官方问答口径）。</li>
+          </ol>
+          <div class="meta-grid">
+            <div><b>你做什么</b>把三类主销 SKU 的税号查一遍，截图存档</div>
+            <div><b>找谁</b>报关行确认税号归类；会计确认能否退</div>
+            <div><b>准备什么</b>商品中文名、材质、用途说明（归类用）</div>
+          </div>
+        </div>
+
+        <div class="official">官方：
+          <a href="https://www.mof.gov.cn/jrttts/202602/t20260203_3983176.htm" target="_blank" rel="noopener">财政部税务总局公告 2026 年第 11 号</a> ·
+          <a href="https://www.gov.cn/zhengce/zhengceku/202602/content_7056762.htm" target="_blank" rel="noopener">2026 年第 5 号管理办法</a> ·
+          <a href="https://www.gov.cn/zhengce/zhengceku/202501/content_7001563.htm" target="_blank" rel="noopener">2025 年第 3 号（9810）</a> ·
+          <a href="http://sww.huangshi.gov.cn/wzsdw/kjdszsq/wtjd/202209/t20220915_940604.html" target="_blank" rel="noopener">黄石综试区退税条件问答</a> ·
+          <a href="https://www.chinatax.gov.cn/chinatax/c102449/c5244920/content.html" target="_blank" rel="noopener">税务总局：如何查出口退税率</a>
+          <span style="color:var(--muted)">（不在手册编造税率数字）</span>
+        </div>
+        <div class="tool-callout">
+          <a class="btnish" href="#archive">进阶：资料卡片库</a>
+          <a class="btnish" href="#s6">下一章：东南亚报税对账</a>
+        </div>
+      </section>
+
+      <!-- 6 -->
+      <section class="panel" id="s6">
+        <h2><span class="flow-num">6</span>东南亚报税与对账（越南代扣拆开讲）</h2>
+        <p class="lead">中国出口退税和平台代扣是两本账。越南政策要分清：你是「个体/家庭卖家」还是「公司卖家」。</p>
+
+        <div class="step">
+          <h3>先建立记账习惯（三国通用）</h3>
+          <ol class="todo">
+            <li>平台结算单分栏：销售额、佣金、运费相关、广告/仓租、代扣税、实际到账</li>
+            <li>中国出口退税/免税另科目，不要和代扣税对冲混记</li>
+            <li>每月导出 CSV，和订单、退货单三方勾稽</li>
+          </ol>
+        </div>
+
+        <div class="step">
+          <h3>越南：个体/家庭 vs 公司（务必拆开）</h3>
+          <div class="example">
+            <b>① 个体 / 家庭卖家（hộ, cá nhân）</b><br>
+            议定 <b>117/2025/NĐ-CP</b> 管的就是这类主体：自 2025-07-01 起，有支付功能的电商平台须代扣 VAT + 个人所得税。<br>
+            证据：
+            <a href="https://zh.vietnamplus.vn/article-post244128.vnp" target="_blank" rel="noopener">越通社报道</a>（A）·
+            法令英译参考 <a href="https://thuvienphapluat.vn/van-ban/EN/Thuong-mai/Decree-117-2025-ND-CP-tax-administration-for-e-commerce-and-digital-platform-based-business-activities/663074/tieng-anh.aspx" target="_blank" rel="noopener">Decree 117 文本</a>（A/法规库）。
+          </div>
+          <div class="example">
+            <b>② 公司卖家（Công ty 等组织）</b><br>
+            <b>Shopee 卖家学院明示</b>：对「组织/公司」类型，<strong>不适用</strong>平台代扣代缴（表格写 KHÔNG ÁP DỤNG），但仍要向平台提供信息。<br>
+            证据 B：<a href="https://banhang.shopee.vn/edu/article/24233" target="_blank" rel="noopener">Shopee：2025-07-01 起代扣说明（含公司不适用表）</a><br>
+            TikTok 越南站：若你是已注册税号的组织并完成税号校验，平台服务费计税方式会不同——见
+            <a href="https://seller-vn.tiktok.com/university/essay?knowledge_id=10011442&lang=en" target="_blank" rel="noopener">TikTok Shop 平台费税务说明</a>（B）。
+          </div>
+          <div class="warn"><b>中国公司在越南站开店：</b>关键是卖家中心「经营主体/法律形式」有没有填成公司并上传税号。填错成个人，平台可能按个人代扣，退回很麻烦（Shopee 写明信息错误不回溯退税）。</div>
+        </div>
+
+        <div class="step">
+          <h3>中国公司：在卖家中心怎么自查（逐步）</h3>
+          <ol class="todo">
+            <li>登录 Shopee / Lazada / TikTok Shop <b>越南站</b>卖家中心</li>
+            <li>找到「账户设置 / Account Settings / 税务 Tax / 身份信息」类菜单</li>
+            <li>核对：主体类型是否为 Company/企业；税号（MST）是否为企业税号而非个人身份证号</li>
+            <li>打开一笔已结算订单：看付款明细有没有「Thuế / Tax withheld」——公司主体按 Shopee 说明通常不应被代扣销售 VAT/PIT；若仍被扣，截图工单问平台并同步会计</li>
+            <li>下载「已付款/企业收入」报表，把扣费项与后台税务设置截图一起存档</li>
+          </ol>
+          <div class="meta-grid">
+            <div><b>你做什么</b>三平台各导出近 30 天结算 + 税务设置截图</div>
+            <div><b>找谁</b>平台在线客服/客户经理；越南税务顾问（若有本地主体）</div>
+            <div><b>准备什么</b>营业执照、企业税号、授权开店资料</div>
+          </div>
+        </div>
+
+        <div class="official">来源汇总：
+          <a href="https://banhang.shopee.vn/edu/article/24233" target="_blank" rel="noopener">Shopee 官方代扣文（公司不适用）</a> ·
+          <a href="https://banhang.shopee.vn/edu/article/24204" target="_blank" rel="noopener">Shopee FAQ</a> ·
+          <a href="https://zh.vietnamplus.vn/article-post244128.vnp" target="_blank" rel="noopener">越通社</a> ·
+          其他东南亚国家税率仍以后台+当地机关为准（不编造）
+        </div>
+        <div class="tool-callout">
+          <a class="btnish" href="#s1">回看：钱和税</a>
+          <a class="btnish" href="#s7">下一章：三类品财务注意</a>
+        </div>
+      </section>
+
+      <!-- 7 -->
+      <section class="panel" id="s7">
+        <h2><span class="flow-num">7</span>三类品财务注意（加厚：票证 · 运费危运 · 平台扣费）</h2>
+        <p class="lead">合规成本会进费用；票证不齐会卡退税；平台扣费要和结算单对上。下面按品类拆开写。</p>
+
+        <div class="step">
+          <h3>A. 汽车应急类（尤其含锂电池 / 气雾 / 灭火器）</h3>
+          <ol class="todo">
+            <li><b>SKU 分账</b>：无电配件（三角牌、拖车绳等）与含锂电应急电源、气雾补胎液、灭火器分开建存货与成本科目，别混在一个「应急包」成本里。</li>
+            <li><b>票证</b>：采购专票品名写清「启动电源/锂电池」等；留存 UN38.3 测试报告、危包性能/使用鉴定（如需）扫描件，和报关资料一归档。</li>
+            <li><b>运费 / 危运成本</b>：锂电常按第 9 类危险货物运输，空运更严、海运要包装与标记——运费、鉴定费、检测费全部进成本或「合规费用」，报价时预留毛利。</li>
+            <li><b>平台扣费对账</b>：结算单里佣金、运费险、仓租、广告费与「危运加收」分开列；退货导致的扣款单独一栏，方便月末核对。</li>
+            <li>官方：<a href="https://chinawto.mofcom.gov.cn/article/jsbl/zszc/202306/20230603418270.shtml" target="_blank" rel="noopener">锂电池出口包装要求</a> ·
+              <a href="https://www.gov.cn/zhengce/2018-11/23/content_5723458.htm" target="_blank" rel="noopener">报检规定（出境危险货物包装鉴定）</a></li>
+          </ol>
+        </div>
+
+        <div class="step">
+          <h3>B. 工具类</h3>
+          <ol class="todo">
+            <li><b>票证</b>：专票品名与报关一致（扳手、千斤顶等）；品牌授权书与采购合同一起留存，避免侵权纠纷坏账。</li>
+            <li><b>运费</b>：重货运费占比高，按 SKU 分摊运费到单位成本，否则毛利失真。</li>
+            <li><b>开刃刀具</b>：宁可不做；一旦平台下架/海关扣货，损失走「资产减值/营业外」前先问会计口径。</li>
+            <li><b>平台扣费</b>：大件可能有偏远地区运费补差，结算导出后与订单重量核对。</li>
+            <li>官方：<a href="https://www.gov.cn/zhengce/zhengceku/202411/P020241119387520616554.pdf" target="_blank" rel="noopener">两用物项出口管制清单</a>（高精度设备才紧张）·
+              <a href="https://www.mofcom.gov.cn/zfxxgk/gkml/art/2025/art_3043acb423c042b895e426b5ed6fa4e5.html" target="_blank" rel="noopener">2026 出口许可证目录</a></li>
+          </ol>
+        </div>
+
+        <div class="step">
+          <h3>C. 一次性纸碗 / 食品接触材料（出口常见要求）</h3>
+          <ol class="todo">
+            <li><b>先分清</b>：纸碗是「接触食品的容器」，一般不是「食品本身」。出口食品生产企业备案那套（海关总署令第 249 号）主要管食品；纸碗更常落在商品检验 / 食品接触质量 + 目的国要求。</li>
+            <li><b>质量与标签（财务要留的文件）</b>：向工厂要检测报告/合格证明；包装建议有「食品接触用」等用途说明、材质、生产商信息（国内进口侧答疑常用 GB 4806.1 / GB 4806.8 作质量对标——出口以目的国或合同为准）。</li>
+            <li><b>报检</b>：若该税号列入必须实施检验的进出口商品目录（法检），出境须按规定报检，未经检验或不合格不得出口（《商检法实施条例》）。出境报检一般要合同、发票、装箱单，并附检验合格证或检测报告（见报检规定）。</li>
+            <li><b>税号举例（归类需海关确认，勿直接照抄报关）</b>：海关答疑称纸质餐具常归入 <b>4823</b> 项下；实务中纸杯等曾见编码如 48236900xx，且历史上可能带法检监管条件——<strong>以你合同当年《法检目录》+ 属地海关归类为准</strong>。</li>
+            <li><b>成本</b>：检测费、报检费、轻泡货运费（体积重）全部进成本；平台包装破损赔付单独登记。</li>
+            <li>官方：
+              <a href="https://www.gov.cn/zhengce/2018-11/23/content_5723458.htm" target="_blank" rel="noopener">出入境检验检疫报检规定</a> ·
+              <a href="https://xzfg.moj.gov.cn/front/law/detail?LawID=1829" target="_blank" rel="noopener">进出口商品检验法实施条例（法检不准出口等）</a> ·
+              <a href="http://paper.people.com.cn/rmrbhwb/html/2024-06/01/content_26061187.htm" target="_blank" rel="noopener">海关答疑：纸质餐具与 4823 / GB4806（偏进口口径，出口作质量参考）</a> ·
+              <a href="https://www.gov.cn/gongbao/content/2021/content_5621202.htm" target="_blank" rel="noopener">海关总署令第 249 号（出口食品，搭售调料时再看）</a>
+            </li>
+          </ol>
+        </div>
+
+        <div class="step">
+          <h3>三类品共通：月末对账三张表</h3>
+          <ol class="todo">
+            <li><b>采购进项表</b>：专票号码、品名、金额、税额、对应出货批次</li>
+            <li><b>出运表</b>：报关/清单号、监管方式、运费、危运/报检费</li>
+            <li><b>平台结算表</b>：销售额、佣金、代扣税（如有）、广告/仓租、实际到账</li>
+          </ol>
+          <div class="meta-grid">
+            <div><b>你做什么</b>按三类品各建文件夹；月末把三张表对平</div>
+            <div><b>找谁</b>会计、货代、工厂质检</div>
+            <div><b>准备什么</b>专票 PDF、检测报告、结算导出 CSV</div>
+          </div>
+        </div>
+        <div class="tool-callout">
+          <a class="btnish" href="#export-list">禁限清单核对 SKU</a>
+          <a class="btnish" href="#s8">下一章：复盘清单</a>
+        </div>
+      </section>
+
+      <!-- 8 -->
+      <section class="panel" id="s8">
+        <h2><span class="flow-num">8</span>复盘清单（每月可勾）</h2>
+        <p class="lead">学完按月执行。做不完就先做标了「本周」的。</p>
+        <div class="step">
+          <ol class="todo">
+            <li>【本周】用 <a href="#checker">自查灯</a> 跑一遍，保存结果截图</li>
+            <li>【本周】SKU（单个商品型号）表：电池/气雾/刀具/品牌授权列清楚；可疑的用 <a href="#export-list">禁限清单</a> 查</li>
+            <li>【本周】问货代：当前监管方式代码是 9610 / 9710 / 9810 / 0110？</li>
+            <li>【本月】确认一般纳税人 + 专票链路；需要则办退税备案</li>
+            <li>【本月】导出三平台结算单，分栏登记代扣税与到账</li>
+            <li>【持续】退税申报期内收齐报关、专票、收汇，留存单证</li>
+          </ol>
+          <div class="meta-grid">
+            <div><b>你做什么</b>把上面 6 条做成月度勾选表，贴在财务文件夹首页</div>
+            <div><b>找谁</b>会计/退税代理复盘；货代确认模式</div>
+            <div><b>准备什么</b>自查灯截图、结算导出、报关单样本</div>
+          </div>
+        </div>
+        <div class="tool-callout">
+          <a class="btnish" href="#checker">去跑自查灯</a>
+          <a class="btnish" href="#glossary">复习名词</a>
+          <a class="btnish" href="#audit">看手册自查报告</a>
+        </div>
+      </section>
+
+      <!-- glossary -->
+      <section class="panel glossary" id="glossary">
+        <h2>名词小词典（看不懂点开）</h2>
+        <p class="lead">正文里悬停彩色词也能看解释。这里集中复习。</p>
+        <details><summary>出口退税</summary><p>货物合法出口后，国家把你在国内环节已交的增值税（有时消费税）按规定退还或免征出口环节税。不是国外平台给你退钱。</p></details>
+        <details><summary>增值税专用发票（专票）</summary><p>能单独体现税额的发票。外贸出口退税常靠它证明进项税。</p></details>
+        <details><summary>一般纳税人</summary><p>增值税纳税人的一类。通常可领用专票，也是很多出口退税情形的前提。</p></details>
+        <details><summary>9610 / 9710 / 9810 / 0110</summary><p>海关监管方式代码：零售直邮、B2B 直邮、海外仓、一般贸易。决定申报与退税路径。</p></details>
+        <details><summary>综试区 · 无票免税</summary><p>跨境电商综合试验区里，9610 零售出口若拿不到有效进货凭证，符合条件可免增值税/消费税（不是退税到账）。</p></details>
+        <details><summary>VAT / GST</summary><p>国外常见的增值税/商品服务税。可能由卖家缴纳或平台代扣。</p></details>
+        <details><summary>收汇</summary><p>出口货款从境外收到境内合规账户。退税通常有时限要求。</p></details>
+        <details><summary>UN38.3</summary><p>锂电池航空/海运常见的安全测试要求。应急启动电源常会遇到。</p></details>
+        <details><summary>结算单 / 佣金</summary><p>结算单=平台打款明细；佣金=平台抽成。财务对账从这两项开始。</p></details>
+        <details><summary>货代 / 报关单</summary><p>货代帮你出货清关；报关单是海关申报记录，退税常要和专票核对。</p></details>
+        <details><summary>进项税额</summary><p>买货时发票上的税额。出口退税退的往往就是符合条件的进项税额。</p></details>
+        <details><summary>免抵退 / 免退税</summary><p>两种退税计算方法：生产企业常用免抵退；外贸买货出口常用免退税。</p></details>
+        <details><summary>小规模纳税人</summary><p>相对一般纳税人的类型，通常更难走「有票退税」，很多团队会先升级一般纳税人。</p></details>
+        <details><summary>单一窗口</summary><p>国际贸易单一窗口网站/系统，报关、跨境清单、部分退税申报常在这里办。</p></details>
+        <details><summary>SKU</summary><p>Stock Keeping Unit，单个商品型号/库存单位。财务和合规都要按 SKU 分清楚。</p></details>
+        <details><summary>食品接触材料</summary><p>会碰到食物的碗、杯、餐盒等。质量不合格可能影响出口与平台上架，检测费要进成本。</p></details>
+        <details><summary>危险货物（危运）</summary><p>运输时有燃爆等风险的货（如许多锂电池）。不是「禁止出口」，但包装、申报、运费更严。</p></details>
+      </section>
+
+
+      <section class="panel" id="audit">
+        <h2>手册自查报告（给读者看的改进说明）</h2>
+        <div class="step">
+          <h3>本轮追加（自学导学 + 提问检索）</h3>
+          <ul>
+            <li>新增 <a href="#learn-how">怎么自学</a>：约 40 分钟推荐路径，与正文导学并存。</li>
+            <li>顶栏搜索框 + 8 个常见问题快捷按钮；检索正文、名词、禁限清单、资料卡片，可跳锚点。</li>
+            <li>工具区同步提供二次搜索入口。</li>
+          </ul>
+        </div>
+
+        <p class="lead">本页于 2026-10-27（Asia/Shanghai）对概念、证据、流程断链做了自查并已改一版。下面是发现与处理，方便你知道手册边界。</p>
+
+        <div class="step">
+          <h3>1）概念：仍可能卡的词（已补进词典/正文）</h3>
+          <ol class="todo">
+            <li>结算单、佣金 —— 已加悬停 + 词典</li>
+            <li>货代、报关单、单一窗口 —— 已加</li>
+            <li>进项税额、免抵退、免退税 —— 已加</li>
+            <li>小规模纳税人（对比一般纳税人）—— 已加</li>
+            <li>SKU、食品接触材料、危险货物/危运 —— 已加</li>
+            <li><b>仍建议你向会计确认的：</b>具体会计科目怎么记代扣税、出口退税贷方怎么入账（手册不教做凭证分录）</li>
+          </ol>
+        </div>
+
+        <div class="step">
+          <h3>2）证据：链接与等级（加厚后）</h3>
+          <ol class="todo">
+            <li><b>随州综试区</b>：已对照多份国务院批复名单，未见随州；湖北可见武汉/黄石/襄阳/鄂州等。详见正文 <a href="#s3b">3b</a>，并附「向属地确认」步骤。</li>
+            <li><b>退税率查询</b>：已写成逐步点击指南（官网 + 电子税务局），见第 5 章。</li>
+            <li><b>越南代扣</b>：已拆个体 vs 公司；Shopee 官方表写明公司不适用代扣（证据 B），并写清卖家中心自查步骤。</li>
+            <li><b>纸碗</b>：已补报检规定、商检法实施条例、4823 归类提示（归类需海关确认）、GB4806 质量参考链接。</li>
+            <li><b>禁限清单表内</b>：无稳定 URL 条目仍为 D，不编造文号</li>
+          </ol>
+        </div>
+
+        <div class="step">
+          <h3>3）流程断链：已修补</h3>
+          <ol class="todo">
+            <li>第 0/7/8 步原先缺「你做什么/找谁/准备什么」——已补 meta 三格</li>
+            <li>第 1/3/5/6 步与工具互链不足——已加蓝色跳转按钮</li>
+            <li>各章末增加「下一章」衔接，避免学完卡住不知道往哪走</li>
+            <li>工具区与学习流分离保留；正文按钮可跳自查灯/禁限清单/卡片库</li>
+          </ol>
+        </div>
+
+        <div class="warn">若你发现某官方链接打不开：先换网络/备案域名再试；仍不行以政府网站站内搜索文号为准。手册检索日：2026-10-27。</div>
+        <div class="tool-callout">
+          <a class="btnish" href="#s0">回到第 0 步</a>
+          <a class="btnish" href="#checker">打开自查灯</a>
+          <a class="btnish" href="#evidence">来源等级说明</a>
+        </div>
+      </section>
+
+      <!-- evidence -->
+      <section class="panel" id="evidence">
+        <h2>来源与证据等级</h2>
+        <p class="lead">每条重要结论在正文用官方链接标出；工具清单表也有证据列。检索日 2026-10-27（Asia/Shanghai）。</p>
+        <p class="do" style="color:var(--muted);font-size:.88rem">说明：本手册整理公开规则与平台帮助，方便自学与自查，不构成法律或税务意见；具体办理以主管海关、税务局及平台后台当日规则为准。</p>
+        <div class="evidence-grid">
+          <div class="ev"><b style="color:var(--a)">A</b> 官方法规 / 政府文件</div>
+          <div class="ev"><b style="color:var(--b)">B</b> 平台官方帮助 / 公告</div>
+          <div class="ev"><b style="color:var(--c)">C</b> 权威媒体或正规律所</div>
+          <div class="ev"><b style="color:var(--d)">D</b> 二手汇总 / 待核实</div>
+        </div>
+        <div class="official" style="margin-top:16px">常用入口：
+          <a href="https://www.mofcom.gov.cn/zcfb/dwmygl/art/2023/art_07c75ecad2a648fbad6179dc9e2bf763.html" target="_blank" rel="noopener">禁止出口目录</a> ·
+          <a href="https://www.gov.cn/zhengce/zhengceku/202602/content_7056762.htm" target="_blank" rel="noopener">退税管理办法</a> ·
+          <a href="https://www.gov.cn/zhengce/zhengceku/2019-10/17/content_5441297.htm" target="_blank" rel="noopener">财税〔2018〕103 号</a> ·
+          <a href="https://zh.vietnamplus.vn/article-post244128.vnp" target="_blank" rel="noopener">越南平台代扣</a>
+        </div>
+        
+      </section>
+
+      <!-- TOOLS ZONE -->
+      <div class="tools-banner" id="tools">
+        <h2>工具区（不打断上面的学习流程）</h2>
+        <p>自查灯、禁限清单、资料卡片库单独放这里。也可用顶栏「提问检索」。手册改进说明见 <a href="#audit">自查报告</a>。</p>
+        <div class="search-bar" style="margin-top:10px">
+          <input type="search" id="siteSearch2" placeholder="在工具区再搜一次…" />
+          <button type="button" class="primary" id="btnSearch2">检索</button>
+        </div>
+      </div>
+
+      <section class="panel" id="checker">
+    <h2>工具 · 自查灯</h2>
+    <p style="margin:0 0 10px;font-size:.92rem;color:var(--muted)">学完前面「能不能卖 / 票证」后，用这里点选项做体检。不会填就选「不清楚」——按更保守提示，避免后面退税白忙。</p>
+    <div class="quiz" id="quiz">
+      <div class="quiz-grid">
+        <div class="field"><label>公司所在</label>
+          <select id="qRegion"><option value="hubei" selected>湖北</option><option value="other">其他省份</option></select></div>
+        <div class="field"><label>是否在跨境电商综试区注册城市（如武汉/黄石等）</label>
+          <select id="qPilot"><option value="yes">是，在综试区</option><option value="no">否</option><option value="unk" selected>不清楚</option></select></div>
+        <div class="field"><label>主发货方式</label>
+          <select id="qShip"><option value="direct" selected>国内直邮小包</option><option value="wh">海外仓/平台仓备货</option><option value="mix">两种都有</option><option value="unk">不清楚</option></select></div>
+        <div class="field"><label>有无进出口权/海关备案</label>
+          <select id="qCustoms"><option value="yes">有</option><option value="no">没有</option><option value="unk" selected>不清楚</option></select></div>
+        <div class="field"><label>增值税一般纳税人？</label>
+          <select id="qVat"><option value="yes">是</option><option value="no">否/小规模</option><option value="unk" selected>不清楚</option></select></div>
+        <div class="field"><label>上游能否开增值税专用发票？</label>
+          <select id="qInv"><option value="yes">稳定有专票</option><option value="no">基本没有</option><option value="unk" selected>不清楚</option></select></div>
+        <div class="field"><label>汽车应急里是否含锂电池/应急启动电源？</label>
+          <select id="qLi"><option value="yes" selected>有/可能有</option><option value="no">没有</option><option value="unk">不清楚</option></select></div>
+        <div class="field"><label>是否含气雾罐/压力罐/车载灭火器？</label>
+          <select id="qAero"><option value="yes">有</option><option value="no">没有</option><option value="unk" selected>不清楚</option></select></div>
+        <div class="field"><label>工具是否含砍刀/匕首等开刃管制倾向刀具？</label>
+          <select id="qKnife"><option value="yes">有</option><option value="no" selected>没有（扳手钳等）</option><option value="unk">不清楚</option></select></div>
+        <div class="field"><label>一次性纸碗是否宣称食品接触用途？</label>
+          <select id="qBowl"><option value="yes" selected>是（吃饭用）</option><option value="no">否</option><option value="unk">不清楚</option></select></div>
+        <div class="field"><label>品牌是否全部自有或已获授权？</label>
+          <select id="qBrand"><option value="yes">是</option><option value="no">有擦边/未授权</option><option value="unk" selected>不清楚</option></select></div>
+        <div class="field"><label>主要站点</label>
+          <select id="qPlat"><option value="sea" selected>TikTok + Shopee + Lazada</option></select></div>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <button type="button" class="primary" id="btnCheck">生成自查结果</button>
+        <button type="button" class="ghost" id="btnResetQuiz">恢复场景默认</button>
+      </div>
+      <div id="checkResult" class="light-box yellow" style="display:none"></div>
+    </div>
+  </section>
+<section class="panel" id="export-list">
+    <h2>工具 · 禁限可查清单</h2>
+    <p style="margin:0 0 8px;font-size:.9rem;color:var(--muted)">查某个货能不能出口、要不要许可证。高亮与汽车应急 / 五金工具 / 一次性纸碗相关行。正文第 2 步会链到这里。</p>
+    <div class="row toolbar">
+      <input type="search" id="listQ" placeholder="搜：锂电、纸碗、刀具、灭火器、濒危…" style="flex:1;min-width:180px" />
+      <select id="listStatus">
+        <option value="">状态：全部</option>
+        <option value="allow">一般可出</option>
+        <option value="watch">需注意</option>
+        <option value="restrict">限制/危运</option>
+        <option value="license">要许可证</option>
+        <option value="forbid">禁止</option>
+      </select>
+      <select id="listRelated">
+        <option value="">关联品类：全部</option>
+        <option value="汽车应急">汽车应急</option>
+        <option value="工具">工具</option>
+        <option value="一次性纸碗">一次性纸碗</option>
+        <option value="一般">一般大类</option>
+      </select>
+    </div>
+    <div class="stats" id="listStats"></div>
+    <div class="table-wrap">
+      <table class="list" id="listTable">
+        <thead><tr><th>状态</th><th>大类</th><th>货物/情形</th><th>小白话注意点</th><th>官方链接（正文可见）</th><th>证据</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+      <section class="panel" id="archive">
+        <h2>工具 · 资料卡片库（进阶查阅）</h2>
+        <p class="lead">把原来的百科卡片收在这里，避免正文杂乱。主文看步骤即可；需要原文细节再搜卡片。</p>
+        <div class="row toolbar">
+          <input type="search" id="kbQ" placeholder="搜卡片：退税、9610、越南…" style="flex:1;min-width:160px" />
+          <select id="kbTopic"><option value="">主题全部</option><option value="概念">概念</option><option value="合规">合规</option><option value="退税">退税</option><option value="报税">报税</option></select>
+          <select id="kbLevel"><option value="">证据全部</option><option>A</option><option>B</option><option>C</option><option>D</option></select>
+        </div>
+        <!-- keep hidden sync ids for old wireKbFilters -->
+        <div style="display:none">
+          <input id="kbQ2" /><select id="kbTopic2"></select><select id="kbLevel2"></select>
+          <div id="refundCards"></div><div id="taxCards"></div>
+        </div>
+        <div class="stats kbStats"></div>
+        <div id="archiveCards"></div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<script>
+/* inlined from data.js — self-contained */
+// 跨境电商资料站数据 · 检索日 2026-10-27 Asia/Shanghai
+window.KB_META = { retrieved: "2026-10-27", tz: "Asia/Shanghai" };
+
+/** 可出口/禁限清单（常见大类 + 与用户品类相关项）。status: allow|restrict|license|forbid|watch */
+window.EXPORT_LIST = [
+{id:"el-pfos", cat:"化学品/环境管控", name:"十溴二苯醚、PFOS类、短链氯化石蜡、得克隆等", status:"forbid",
+ tip:"列入《禁止出口货物目录（第八批）》等，禁止出口（实验室研究/参考标准除外）。与普通工具/纸碗无关，但若涂层/阻燃剂含此类物质要警惕。",
+ related:["一般"],
+ sources:[{level:"A",name:"商务部公告2023年第63号（禁止出口货物目录第八批）",url:"https://www.mofcom.gov.cn/zcfb/dwmygl/art/2023/art_07c75ecad2a648fbad6179dc9e2bf763.html",date:"2026-10-27"}]},
+{id:"el-cites", cat:"野生动植物", name:"濒危野生动植物及其制品（CITES/国家重点保护）", status:"forbid",
+ tip:"附录所列动物、植物及其制品禁止或严格限制贸易。汽车应急/工具/纸碗通常不涉及；若用品含象牙、部分木材/皮革要停。",
+ related:["一般"],
+ sources:[{level:"A",name:"财政部附件：国家规定不允许经营和限制出口的货物（含濒危）",url:"https://szs.mof.gov.cn/zhengcefabu/202601/P020260131640119733420.pdf",date:"2026-10-27"}]},
+{id:"el-drugs", cat:"管制药品", name:"麻醉药品、精神药品、血液制品、人体组织器官等", status:"forbid",
+ tip:"明确不允许经营/限制出口类型。与三类主打品无关。",
+ related:["一般"],
+ sources:[{level:"A",name:"财政部附件：不允许经营和限制出口的货物",url:"https://szs.mof.gov.cn/zhengcefabu/202601/P020260131640119733420.pdf",date:"2026-10-27"}]},
+{id:"el-ip", cat:"知识产权", name:"假冒商标、盗版、侵权品牌货", status:"forbid",
+ tip:"海关与平台均禁止。汽车应急、工具、纸碗若打知名车标/工具品牌而未获授权=高风险红灯。",
+ related:["汽车应急","工具","一次性纸碗"],
+ sources:[{level:"A",name:"海关总署公告2018年第194号（不得进出口侵犯知识产权商品）",url:"https://www.gov.cn/zhengce/zhengceku/2018-12/31/content_5447414.htm",date:"2026-10-27"}]},
+{id:"el-license-2026", cat:"出口许可证目录货物", name:"稀土、部分金属、成品油、汽车整车、摩托车等目录内43种", status:"license",
+ tip:"《出口许可证管理货物目录（2026年）》内货物须先申领出口许可证。普通手动工具、纸碗、多数汽车应急配件一般不在此目录；但「汽车整车及其底盘」等在目录内——卖的是配件/应急用品，不要误报成整车。",
+ related:["汽车应急","一般"],
+ sources:[{level:"A",name:"商务部 海关总署公告2025年第89号（出口许可证管理货物目录2026年）",url:"https://www.mofcom.gov.cn/zfxxgk/gkml/art/2025/art_3043acb423c042b895e426b5ed6fa4e5.html",date:"2026-10-27"}]},
+{id:"el-dualuse", cat:"两用物项", name:"达到《两用物项出口管制清单》技术指标的物项", status:"license",
+ tip:"不能只看海关税号。高精度机床、特定电子/传感、监控化学品等可能要两用物项许可证。普通家用/汽修工具多数不属；若工具达清单精度/指标，须向商务部咨询鉴别。",
+ related:["工具","一般"],
+ sources:[{level:"A",name:"两用物项出口管制清单（中国政府网PDF）",url:"https://www.gov.cn/zhengce/zhengceku/202411/P020241119387520616554.pdf",date:"2026-10-27"},{level:"A",name:"商务部：两用物项和技术进出口审批",url:"http://www.mofcom.gov.cn/zwdt/lywxhjsjcksp/index.html",date:"2026-10-27"},{level:"A",name:"商务部问答：海关商品编号不是判定两用物项的依据",url:"https://aqygzj.mofcom.gov.cn/zsyd/art/2025/art_b30af830218f4932a9b5ad428d7e664d.html",date:"2026-10-27"}]},
+{id:"el-lithium", cat:"危险货物运输", name:"锂电池 / 移动电源 / 含锂电池的应急启动电源", status:"restrict",
+ tip:"通常不因「禁止出口目录」整类禁止，但空运/海运按第9类危险货物等规则：UN38.3测试、防短路包装、标记，常需危包性能检验/使用鉴定（符合特殊规定188等可豁免使用鉴定）。汽车应急启动电源、充电宝是你们重点黄灯项。",
+ related:["汽车应急"],
+ sources:[{level:"A",name:"商务部WTO咨询网：锂电池及锂电设备出口包装要求",url:"https://chinawto.mofcom.gov.cn/article/jsbl/zszc/202306/20230603418270.shtml",date:"2026-10-27"},{level:"A",name:"西安海关答问：锂电池出口包装使用鉴定与188豁免",url:"http://xian.customs.gov.cn/eportal/ui?msgDataId=de823fefcf254e3cb5f697a28186591a&pageId=434597",date:"2026-10-27"},{level:"A",name:"海关：危险货物进出口申报（非危险化学品勾选等）",url:"http://gdfs.customs.gov.cn/eportal/ui?msgDataId=1b2cc1704a8f487fae2f6f057fa8f017&pageId=393610",date:"2026-10-27"}]},
+{id:"el-aerosol", cat:"危险货物运输", name:"气溶胶、喷雾剂、压力罐、车用灭火器（含压力容器）", status:"restrict",
+ tip:"常属危险货物运输范畴，航空限运/禁运多，海运要按危规申报包装。汽车应急里的补胎液气雾罐、车载灭火器=重点核实项。是否另需「出口许可证」须对照当年许可证目录与危化品监管，不能想当然。",
+ related:["汽车应急"],
+ sources:[{level:"A",name:"出入境检验检疫报检规定（出境危险货物包装鉴定要求）",url:"https://www.gov.cn/zhengce/2018-11/23/content_5723458.htm",date:"2026-10-27"},{level:"D",name:"具体UN编号/是否危化品目录以鉴定报告+货代/海关归类为准（待核实到单品）",url:"",date:"2026-10-27"}]},
+{id:"el-knife", cat:"刀具/锐器", name:"砍刀、匕首等管制刀具；普通工具刀/美工刀/多功能钳", status:"watch",
+ tip:"国内有管制刀具管理制度；出口还看目的国对刀具的禁限。普通扳手/螺丝刀一般绿灯；砍刀、匕首、开刃长刀在东南亚部分国家平台/海关敏感。上架前查平台违禁品+目的国规则。",
+ related:["工具"],
+ sources:[{level:"D",name:"须按公安部管制刀具目录+目的国/平台违禁品逐单核实（本站不编造具体管制型号文号）",url:"",date:"2026-10-27"},{level:"B",name:"请同时打开 Shopee/Lazada/TikTok Shop 卖家中心「违禁商品」页核对",url:"",date:"2026-10-27"}]},
+{id:"el-tools-normal", cat:"五金工具", name:"普通手动工具（扳手、钳子、螺丝刀、千斤顶机械式等，不含管制刃具/两用高精度）", status:"allow",
+ tip:"一般可出口。注意：商标授权、材质与安全标准、目的国认证（若有）、正确归类报关。液压/气动工具看是否含压力部件或电池。",
+ related:["工具","汽车应急"],
+ sources:[{level:"A",name:"未列入禁止出口目录第八批的普通商品，按一般出口管理（对照禁止目录）",url:"https://www.mofcom.gov.cn/zcfb/dwmygl/art/2023/art_07c75ecad2a648fbad6179dc9e2bf763.html",date:"2026-10-27"},{level:"D",name:"具体SKU是否两用物项/危品仍须单品鉴别",url:"",date:"2026-10-27"}]},
+{id:"el-paper-bowl", cat:"食品接触材料", name:"一次性纸碗 / 纸杯 / 纸餐盒（食品接触用）", status:"watch",
+ tip:"通常不在「禁止出口」目录。但属食品接触产品：原料/油墨/涂层应符合食品接触安全；出口要满足目的国标准或合同；标签建议标明食品接触用途。国内进口侧有GB 4806系列强制标准可作质量对标参考；出口以目的国+合同为准。是否法检以《法检目录》监管条件为准，待对税号核实。",
+ related:["一次性纸碗"],
+ sources:[{level:"A",name:"海关总署令第249号《进出口食品安全管理办法》（出口食品企业义务等，食品接触是否适用须按商品属性判断）",url:"https://www.gov.cn/gongbao/content/2021/content_5621202.htm",date:"2026-10-27"},{level:"C",name:"海关答疑转载：纸质餐具与GB 4806（偏进口口径，出口可作质量参考）",url:"http://paper.people.com.cn/rmrbhwb/html/2024-06/01/content_26061187.htm",date:"2026-10-27"},{level:"A",name:"出入境检验检疫报检规定",url:"https://www.gov.cn/zhengce/2018-11/23/content_5723458.htm",date:"2026-10-27"}]},
+{id:"el-food", cat:"食品/农产品", name:"普通食品、保健食品出口", status:"restrict",
+ tip:"出口食品生产企业一般要向住所地海关备案等。你们卖的是纸碗（容器）不是食品本身——别和食品出口流程混用；若纸碗附赠调料包则可能牵出食品规则。",
+ related:["一次性纸碗"],
+ sources:[{level:"A",name:"海关总署令第249号（出口食品生产企业备案等）",url:"https://www.gov.cn/gongbao/content/2021/content_5621202.htm",date:"2026-10-27"}]},
+{id:"el-cosmetic", cat:"化妆品", name:"普通化妆品", status:"watch",
+ tip:"一般可出口，目的国成分/标签/注册要求各异。与主打品无关。",
+ related:["一般"],
+ sources:[{level:"D",name:"目的国注册要求待按市场核实",url:"",date:"2026-10-27"}]},
+{id:"el-medical", cat:"医疗器械", name:"医疗器械（含部分急救贴若被归为器械）", status:"restrict",
+ tip:"常涉及注册/许可与平台类目限制。汽车应急里的「医疗急救包」若含器械类目商品要单独核。",
+ related:["汽车应急"],
+ sources:[{level:"D",name:"是否属二/三类器械及出口许可待单品核实，禁止编造",url:"",date:"2026-10-27"}]},
+{id:"el-battery-alkaline", cat:"电池", name:"普通碱性干电池（非锂电）", status:"watch",
+ tip:"相对锂电宽松，但仍有运输与目的国回收/标识要求。应急包里的干电池闪光灯等属此类。",
+ related:["汽车应急"],
+ sources:[{level:"D",name:"运输条款以承运人与IMDG/IATA当期规则为准",url:"",date:"2026-10-27"}]},
+{id:"el-clothing", cat:"纺织服装", name:"普通服装鞋帽", status:"allow",
+ tip:"一般可出口；注意商标与目的国标签。",
+ related:["一般"],
+ sources:[{level:"A",name:"对照禁止出口目录：普通服装不在第八批化学品禁出范围",url:"https://www.mofcom.gov.cn/zcfb/dwmygl/art/2023/art_07c75ecad2a648fbad6179dc9e2bf763.html",date:"2026-10-27"}]},
+{id:"el-electronics", cat:"电子消费品", name:"不含/含锂电的消费电子", status:"watch",
+ tip:"纯电子（无电池）相对简单；一旦带锂电，按锂电运输规则。",
+ related:["汽车应急","一般"],
+ sources:[{level:"A",name:"锂电池出口包装要求（商务部WTO咨询网）",url:"https://chinawto.mofcom.gov.cn/article/jsbl/zszc/202306/20230603418270.shtml",date:"2026-10-27"}]},
+{id:"el-toxic", cat:"有毒化学品", name:"《中国严格限制的有毒化学品名录》列名物质", status:"license",
+ tip:"列名物质进出口受严格限制。与纸碗油墨/涂层若涉管制化学品需供应链排查。",
+ related:["一次性纸碗","一般"],
+ sources:[{level:"A",name:"财政部附件列举：生态环境部等发布的严格限制有毒化学品名录",url:"https://szs.mof.gov.cn/zhengcefabu/202601/P020260131640119733420.pdf",date:"2026-10-27"}]},
+{id:"el-waste", cat:"固体废物", name:"废料、垃圾、禁止出口的废物", status:"forbid",
+ tip:"禁止以「废物」名义出口。残次纸碗废料不当出口。",
+ related:["一次性纸碗","一般"],
+ sources:[{level:"A",name:"禁止进出口货物目录相关公告入口（商务部）",url:"https://www.mofcom.gov.cn/zcfb/dwmygl/art/2023/art_07c75ecad2a648fbad6179dc9e2bf763.html",date:"2026-10-27"}]},
+{id:"el-auto-parts", cat:"汽车配件/应急", name:"反光三角牌、拖车绳、安全锤、手套等无电池无压力无刃无危化配件", status:"allow",
+ tip:"一般可出口。注意当地交规认证（部分国家对三角牌有标准）、商标、如实申报。",
+ related:["汽车应急"],
+ sources:[{level:"A",name:"对照禁止出口目录与出口许可证目录：此类配件通常不在列（整车除外）",url:"https://www.mofcom.gov.cn/zfxxgk/gkml/art/2025/art_3043acb423c042b895e426b5ed6fa4e5.html",date:"2026-10-27"},{level:"D",name:"目的国交规/认证待按国别核实",url:"",date:"2026-10-27"}]}
+];
+
+window.KB_ITEMS = [
+{id:"scene-hub", section:"场景", topic:"概念", platforms:["国内","Shopee","Lazada","TikTok"], level:"A",
+ title:"你的场景卡片：湖北 + 东南亚三平台 + 三类货",
+ keywords:"湖北 黄石 武汉 综试区 TikTok Shopee Lazada 汽车应急 工具 纸碗",
+ plain:"按你已提供的信息，下面默认按这个场景给建议。选项不清楚时，自查灯会按「保守」提示。",
+ bodyHtml:`
+<p><b>已知：</b>公司在湖北；卖 TikTok Shop、Shopee、Lazada；品类=汽车应急、工具、一次性纸碗。</p>
+<p><b>你先记住三件事：</b>① 三类货大多不是「整类禁止出口」，但锂电/气雾/灭火器/管制刀具/侵权是红黄灯；② 东南亚报税多是平台代扣或当地 VAT，和中国出口退税分开；③ 湖北有综试区城市（如武汉、黄石等），若注册在综试区且走 9610，才可能谈「无票免税」。</p>
+<p class="youdo"><b>你要做什么：</b>打开下方「自查灯」点选项 → 再在「可查清单」搜你的具体品名。<br>
+<b>找谁：</b>属地海关（报关/危包）、主管税务机关（退税备案）、市商务局/综试办（综服平台）、货代（锂电/危品运输）。<br>
+<b>大概准备：</b>营业执照、产品说明书/成分、是否含电池照片、商标授权、采购合同与发票。</p>
+<div class="official">官方入口：
+<a href="https://www.mofcom.gov.cn/zcfb/dwmygl/art/2023/art_07c75ecad2a648fbad6179dc9e2bf763.html" target="_blank" rel="noopener">禁止出口目录公告</a> ·
+<a href="https://www.mofcom.gov.cn/zfxxgk/gkml/art/2025/art_3043acb423c042b895e426b5ed6fa4e5.html" target="_blank" rel="noopener">出口许可证目录2026</a> ·
+<a href="http://sww.huangshi.gov.cn/wzsdw/kjdszsq/wtjd/202209/t20220915_940604.html" target="_blank" rel="noopener">黄石综试区退税条件问答</a>
+</div>`,
+ sources:[{level:"A",name:"黄石综试区：适用跨境电商出口退税的条件",url:"http://sww.huangshi.gov.cn/wzsdw/kjdszsq/wtjd/202209/t20220915_940604.html",date:"2026-10-27"},{level:"A",name:"财税〔2018〕103号（综试区无票免税）",url:"https://www.gov.cn/zhengce/zhengceku/2019-10/17/content_5441297.htm",date:"2026-10-27"}]},
+{id:"concept-3tax", section:"概念", topic:"概念", platforms:["国内","欧盟","美国","英国","Shopee","Lazada","TikTok"], level:"A",
+ title:"三种「退税」别混：中国出口退税 ≠ 国外 VAT 抵扣 ≠ 平台代扣",
+ keywords:"退税 VAT 销售税 出口退税",
+ plain:"聊天里说的退税，其实常常是三件不同的事。",
+ bodyHtml:`
+<ol class="steps">
+<li><b>中国出口退税</b>：货合法出口后，把国内已交增值税（有时消费税）按规定退/免给你。</li>
+<li><b>销售国 VAT/GST 进项抵扣或退还</b>：你在当地注册纳税人后，对已交进项税的抵扣——和中国出口退税无关。</li>
+<li><b>平台代扣代缴</b>：如越南电商平台从货款扣 VAT/个税——这是代缴，不是退给你。</li>
+</ol>
+<div class="example"><strong>例子：</strong>纸碗从湖北发到越南 Shopee。中国侧可能出口退税；越南侧平台可能代扣。两套账。</div>
+<div class="official">官方：
+<a href="https://www.mof.gov.cn/jrttts/202602/t20260203_3983176.htm" target="_blank" rel="noopener">财政部税务总局公告2026年第11号</a> ·
+<a href="https://zh.vietnamplus.vn/article-post244128.vnp" target="_blank" rel="noopener">越通社：平台代扣说明</a>
+</div>`,
+ sources:[{level:"A",name:"财政部 税务总局公告2026年第11号",url:"https://www.mof.gov.cn/jrttts/202602/t20260203_3983176.htm",date:"2026-10-27"},{level:"A",name:"越通社报道政令117平台代扣",url:"https://zh.vietnamplus.vn/article-post244128.vnp",date:"2026-10-27"}]},
+{id:"refund-flow", section:"退税", topic:"退税", platforms:["国内"], level:"A",
+ title:"出口退税怎么做（步骤：你做什么 / 找谁 / 准备啥）",
+ keywords:"退税流程 备案 专票 收汇 湖北",
+ plain:"想退税就按这条流水线走；做不到专票，再看综试区9610免税。",
+ bodyHtml:`
+<ol class="steps">
+<li><b>首次备案</b> — 找谁：主管税务机关（电子税务局）。准备：出口退（免）税备案表等。</li>
+<li><b>拿进项票</b> — 找谁：供应商。准备：增值税专用发票，品名数量尽量与报关一致。</li>
+<li><b>报关离境</b> — 找谁：报关行/货代+海关（单一窗口）。准备：合同发票箱单、商品归类资料。</li>
+<li><b>收汇</b> — 找谁：银行。原则：报关出口次年4月30日前收汇（有例外规则）。</li>
+<li><b>申报退税</b> — 找谁：电子税务局/单一窗口。生产企业先做完当期增值税申报。</li>
+<li><b>留存单证</b> — 合同、运单、委托报关等，申报后15日内备齐，保存期长。</li>
+</ol>
+<div class="official">官方：
+<a href="https://www.gov.cn/zhengce/zhengceku/202602/content_7056762.htm" target="_blank" rel="noopener">税务总局公告2026年第5号管理办法</a> ·
+<a href="https://www.gov.cn/zhengce/zhengceku/202501/content_7001563.htm" target="_blank" rel="noopener">2025年第3号（9810离境即退税）</a>
+</div>`,
+ sources:[{level:"A",name:"国家税务总局公告2026年第5号",url:"https://www.gov.cn/zhengce/zhengceku/202602/content_7056762.htm",date:"2026-10-27"},{level:"A",name:"国家税务总局公告2025年第3号",url:"https://www.gov.cn/zhengce/zhengceku/202501/content_7001563.htm",date:"2026-10-27"}]},
+{id:"refund-mode", section:"退税", topic:"退税", platforms:["国内","Shopee","Lazada","TikTok"], level:"A",
+ title:"9610 / 9710 / 9810 / 0110：退税差在哪（东南亚卖家怎么选）",
+ keywords:"9610 9710 9810 无票免税 直邮 海外仓",
+ plain:"小包直邮常碰9610；备货仓常碰9810或一般贸易0110；卖给境外企业可用9710。",
+ bodyHtml:`
+<div class="example">
+· <b>9610</b>：平台零售直邮个人。有专票→可退税；综试区符合条件无票→免税（不是退税）。<br>
+· <b>9710</b>：B2B，一般按退（免）税，不宜套无票免税。<br>
+· <b>9810</b>：海外仓，可退税，支持离境预退再核算。<br>
+· <b>0110</b>：一般贸易，经典退税路径。
+</div>
+<p class="youdo"><b>东南亚三平台常见：</b>小包→先问货代能否做9610清单；一件代发海外仓→问清是9810还是0110报关。</p>
+<div class="official">官方：
+<a href="https://www.gov.cn/zhengce/zhengceku/2019-10/17/content_5441297.htm" target="_blank" rel="noopener">财税〔2018〕103号</a> ·
+<a href="http://zhejiang.chinatax.gov.cn/art/2024/10/16/art_23318_634415.html" target="_blank" rel="noopener">浙江税务：无票免税不宜扩至9710/9810</a> ·
+<a href="https://www.gov.cn/zhengce/zhengceku/2018-12/31/content_5447414.htm" target="_blank" rel="noopener">海关总署2018年194号</a>
+</div>`,
+ sources:[{level:"A",name:"财税〔2018〕103号",url:"https://www.gov.cn/zhengce/zhengceku/2019-10/17/content_5441297.htm",date:"2026-10-27"},{level:"A",name:"浙江省税务局金华答复",url:"http://zhejiang.chinatax.gov.cn/art/2024/10/16/art_23318_634415.html",date:"2026-10-27"}]},
+{id:"sea-tax", section:"报税", topic:"报税", platforms:["Shopee","Lazada","TikTok"], level:"A",
+ title:"Shopee / Lazada / TikTok Shop：东南亚报税在讲什么",
+ keywords:"越南 代扣 GST VAT 东南亚",
+ plain:"没有统一「东南亚退税」。各国自己收 VAT/GST；越南已明确平台代扣。",
+ bodyHtml:`
+<ol class="steps">
+<li><b>越南</b>：2025-07-01起有支付功能的平台为个体/户主卖家代扣 VAT+个税（商品 VAT 等比例按法令）。</li>
+<li><b>新马泰印菲等</b>：税率与低值包裹规则不同，以当地机关和平台后台为准——本站不编造统一税率表。</li>
+<li><b>对中国公司</b>：仍要解决中国出口报关与（如需）退税；平台代扣≠中国出口退税。</li>
+</ol>
+<p class="youdo"><b>你要做什么：</b>在三个平台卖家中心打开「税务/Tax」设置，补齐税号与主体信息；下单后对账是否被代扣。<br>
+<b>找谁：</b>平台卖家支持 + 当地税务代理（若你有本地主体）。</p>
+<div class="official">官方/权威：
+<a href="https://zh.vietnamplus.vn/article-post244128.vnp" target="_blank" rel="noopener">越通社：平台代扣</a> ·
+<a href="https://vietanlaw.com/online-sales-tax-deduction-in-vietnam/" target="_blank" rel="noopener">律所解读 Decree 117（C级）</a>
+</div>`,
+ sources:[{level:"A",name:"越通社",url:"https://zh.vietnamplus.vn/article-post244128.vnp",date:"2026-10-27"},{level:"C",name:"Viet An Law on Decree 117",url:"https://vietanlaw.com/online-sales-tax-deduction-in-vietnam/",date:"2026-10-27"}]}
+];
+</script>
+<script>
+const STATUS_LABEL = {allow:"一般可出",watch:"需注意",restrict:"限制/危运",license:"要许可证",forbid:"禁止"};
+function esc(s){return String(s||"").replace(/[&<>"']/g,c=>({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[c]));}
+
+function renderList(){
+  const q=(listQ.value||"").trim().toLowerCase();
+  const st=listStatus.value, rel=listRelated.value;
+  const tb=document.querySelector("#listTable tbody");
+  tb.innerHTML="";
+  let n=0;
+  (window.EXPORT_LIST||[]).forEach(row=>{
+    const hay=(row.cat+row.name+row.tip+row.related.join(" ")).toLowerCase();
+    if(q && !hay.includes(q)) return;
+    if(st && row.status!==st) return;
+    if(rel && !row.related.includes(rel)) return;
+    n++;
+    const tr=document.createElement("tr");
+    if(row.related.some(r=>["汽车应急","工具","一次性纸碗"].includes(r))) tr.classList.add("hl");
+    const links=(row.sources||[]).filter(s=>s.url).map(s=>`<a href="${esc(s.url)}" target="_blank" rel="noopener">[${esc(s.level)}] ${esc(s.name)}</a>`).join("<br>");
+    const maxLv=(row.sources||[]).map(s=>s.level).sort((a,b)=>"ABCD".indexOf(a)-"ABCD".indexOf(b)||0)[0]||"D";
+    tr.innerHTML=`<td><span class="st ${row.status}">${STATUS_LABEL[row.status]}</span></td>
+      <td>${esc(row.cat)}</td><td><b>${esc(row.name)}</b><div style="color:var(--muted);font-size:.78rem">${row.related.map(esc).join(" · ")}</div></td>
+      <td>${esc(row.tip)}</td>
+      <td class="src">${links||"<span style='color:var(--muted)'>待核实（无稳定URL）</span>"}</td>
+      <td><span class="level ${maxLv}">${maxLv}</span></td>`;
+    tb.appendChild(tr);
+  });
+  listStats.textContent=`显示 ${n} / 共 ${(EXPORT_LIST||[]).length} 条清单 · 黄底高亮=与你三类货相关`;
+}
+
+function cardHtml(it){
+  return `<span class="level ${it.level}">证据 ${it.level}</span>
+      <h3>${esc(it.title)}</h3>
+      <div class="tags"><span class="tag topic-${esc(it.topic)}">${esc(it.topic)}</span>${it.platforms.map(p=>`<span class="tag">${esc(p)}</span>`).join("")}</div>
+      <p>${esc(it.plain)}</p>
+      ${it.bodyHtml||""}
+      <details class="sources"><summary>展开全部来源明细</summary>
+        <ul class="source-list">${(it.sources||[]).map(s=>`<li><b>[${esc(s.level)}]</b> ${s.url?`<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.name)}</a>`:esc(s.name)}<div style="color:var(--muted)">${esc(s.date||"")}</div></li>`).join("")}</ul>
+      </details>`;
+}
+function renderKB(){
+  const q=(kbQ&&kbQ.value||"").trim().toLowerCase();
+  const topic=kbTopic&&kbTopic.value||"", level=kbLevel&&kbLevel.value||"";
+  const refundBox=document.getElementById("refundCards");
+  const taxBox=document.getElementById("taxCards");
+  const archive=document.getElementById("archiveCards");
+  if(refundBox) refundBox.innerHTML="";
+  if(taxBox) taxBox.innerHTML="";
+  if(archive) archive.innerHTML="";
+  let n=0, dist={A:0,B:0,C:0,D:0};
+  (window.KB_ITEMS||[]).forEach(it=>{
+    dist[it.level]=(dist[it.level]|0)+1;
+    const hay=(it.title+it.keywords+it.plain).toLowerCase();
+    if(q&&!hay.includes(q)) return;
+    if(topic&&it.topic!==topic) return;
+    if(level&&it.level!==level) return;
+    n++;
+    const el=document.createElement("article");
+    el.className="card";
+    el.innerHTML=cardHtml(it);
+    const isTax = it.topic==="报税" || (it.platforms||[]).some(p=>["Shopee","Lazada","TikTok"].includes(p)) && it.topic!=="退税" && it.id!=="refund-flow" && it.id!=="refund-mode";
+    const isRefund = it.topic==="退税" || it.id==="refund-flow" || it.id==="refund-mode" || it.id==="concept-3tax" || it.id==="scene-hub";
+    // Main learning flow no longer dumps cards; archive in tools if present
+    if(archive){ archive.appendChild(el); }
+    else if(isRefund && refundBox) refundBox.appendChild(el);
+    else if(taxBox) taxBox.appendChild(el);
+    else if(refundBox) refundBox.appendChild(el);
+  });
+  const statsTxt=`显示 ${n} / ${(KB_ITEMS||[]).length} 张 · 分布 A${dist.A} B${dist.B} C${dist.C} D${dist.D}`;
+  document.querySelectorAll(".kbStats").forEach(el=>{el.textContent=statsTxt});
+}
+function setupSideNav(){
+  const links=[...document.querySelectorAll(".side-nav a")];
+  const map=links.map(a=>({a, id:a.getAttribute("href").slice(1)}));
+  const io=new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{
+      if(!en.isIntersecting) return;
+      const id=en.target.id;
+      links.forEach(l=>l.classList.toggle("active", l.getAttribute("href")==="#"+id));
+    });
+  },{rootMargin:"-20% 0px -65% 0px", threshold:0.01});
+  map.forEach(({id})=>{const el=document.getElementById(id); if(el) io.observe(el);});
+  const btn=document.getElementById("menuBtn");
+  const side=document.getElementById("sidebar");
+  if(btn&&side){
+    btn.addEventListener("click",()=>side.classList.toggle("open"));
+    links.forEach(l=>l.addEventListener("click",()=>side.classList.remove("open")));
+  }
+}
+
+function setDefaults(){
+  qRegion.value="hubei"; qPilot.value="unk"; qShip.value="direct";
+  qCustoms.value="unk"; qVat.value="unk"; qInv.value="unk";
+  qLi.value="yes"; qAero.value="unk"; qKnife.value="no"; qBowl.value="yes"; qBrand.value="unk";
+}
+
+function runCheck(){
+  const issues=[];
+  let score=0; // higher = worse
+  const add=(lvl,title,why,next)=>{issues.push({lvl,title,why,next}); score+=lvl==="red"?3:lvl==="yellow"?2:1;};
+
+  if(qBrand.value==="no") add("red","商标/品牌侵权风险","未授权品牌是海关与平台红线。","立刻下架擦边链接；只卖自有商标或有书面授权的货。官方：海关总署2018年194号。");
+  if(qBrand.value==="unk") add("yellow","品牌授权未确认","不清楚是否侵权=按有风险处理。","把在售链接商标列清单，法务/代理查近似商标。");
+
+  if(qLi.value==="yes"||qLi.value==="unk") add("yellow","含锂电池应急电源","锂电出口多按危险货物运输管理，要测试与包装合规。","向货代要 UN38.3 与包装方案；问属地海关危包鉴定。参考商务部WTO咨询网锂电包装文。");
+  if(qAero.value==="yes"||qAero.value==="unk") add("yellow","气雾/灭火器等压力容器","空运常受限，海运需按危规。","把 SKU 交给货代做危品鉴定；不能走的站点停售或改海运大货。");
+  if(qKnife.value==="yes"||qKnife.value==="unk") add(qKnife.value==="yes"?"red":"yellow","刀具管制/目的国禁限","开刃刀具国内+东南亚平台敏感。","对照公安管制刀具与平台违禁品；不确定先别上架。");
+  if(qBowl.value==="yes"||qBowl.value==="unk") add("yellow","食品接触材料合规","纸碗质量与目的国标准、标签相关。","向工厂要食品接触检测/符合性声明；标签标食品接触用途；问海关该税号是否需报检。");
+
+  if(qCustoms.value!=="yes") add("yellow","海关/进出口备案可能未齐","没有备案很难自己规范报关退税。","找属地海关或报关行办收发货人备案；可暂委托有资质主体。");
+  if(qVat.value!=="yes"||qInv.value!=="yes") add("yellow","退税条件可能不够","无一般纳税人或无专票，很难有票退税。","能转一般纳税人+要专票就冲退税；否则评估综试区9610无票免税（仅免税不退税）。");
+  if(qPilot.value==="no" && qInv.value==="no") add("yellow","非综试区且无票","无票免税主要给综试区9610。","考虑迁址/注册到综试区城市，或换有票供应链。依据财税〔2018〕103号。");
+  if(qPilot.value==="unk") add("yellow","是否综试区未确认","湖北武汉、黄石等有综试区政策问答可查。","打当地商务局/综试办电话确认；黄石有公开问答页。");
+
+  if(qShip.value==="direct"||qShip.value==="mix"||qShip.value==="unk") add("green","直邮路径","小包常见9610或快件，数据要真实。","问货代湖北口岸能否做9610清单核放；保留交易物流收款数据。");
+  if(qShip.value==="wh"||qShip.value==="mix") add("green","海外仓路径","可能9810/0110，退税规则不同。","与货代书面确认监管方式代码；有仓未售完可了解9810预退税。");
+
+  add("green","东南亚三平台税务","越南等有平台代扣；其他国看后台。","三个平台Tax设置补全；越南参考越通社平台代扣报道；税率以平台和国家机关为准。");
+
+  const worst=issues.some(i=>i.lvl==="red")?"red":issues.some(i=>i.lvl==="yellow")?"yellow":"green";
+  const title=worst==="red"?"红灯：有硬阻断项，先停高风险SKU":worst==="yellow"?"黄灯：能做，但要先补合规与资质":"绿灯：大方向可推进，仍按清单落地";
+  const lights=worst==="red"?"🔴 红灯":worst==="yellow"?"🟡 黄灯":"🟢 绿灯";
+
+  const steps=[];
+  steps.push("把在售SKU分成：普通工具/无电应急配件、含锂电、气雾灭火器、纸碗、刀具（如有）。");
+  steps.push("含锂电与气雾：本周内找货代+属地海关确认运输与鉴定文件。");
+  steps.push("商标：清掉未授权品牌图与标题。");
+  steps.push("纸碗：向工厂要食品接触合格证明，核对目的国标签。");
+  if(qCustoms.value!=="yes") steps.push("去属地海关/报关行确认进出口备案状态。");
+  if(qVat.value==="yes"&&qInv.value==="yes") steps.push("办理/核对出口退（免）税备案，走有票退税。");
+  else steps.push("若在综试区：评估9610无票免税；否则优先解决专票或综服资质。");
+  steps.push("Shopee/Lazada/TikTok：补税务信息；越南店核对代扣。");
+  steps.push("官方禁限对照："+( "https://www.mofcom.gov.cn/zcfb/dwmygl/art/2023/art_07c75ecad2a648fbad6179dc9e2bf763.html"));
+
+  const box=document.getElementById("checkResult");
+  box.style.display="block";
+  box.className="light-box "+worst;
+  box.innerHTML=`<div class="lights">${lights}</div><h3 style="margin:6px 0">${title}</h3>
+    <p style="margin:0 0 8px;font-size:.9rem">根据你当前选项生成（含「不清楚」已按保守处理）。证据政策见本页清单与卡片中的官方链接。</p>
+    <div>${issues.map(i=>`<div style="margin:8px 0;padding:8px;background:rgba(255,255,255,.65);border-radius:8px">
+      <b>${i.lvl==="red"?"红":i.lvl==="yellow"?"黄":"绿"} · ${esc(i.title)}</b>
+      <div style="font-size:.88rem">${esc(i.why)}</div>
+      <div style="font-size:.88rem"><b>下一步：</b>${esc(i.next)}</div>
+    </div>`).join("")}</div>
+    <h4 style="margin:12px 0 6px">你现在该办的清单</h4>
+    <ol class="todo">${steps.map(s=>`<li>${esc(s)}</li>`).join("")}</ol>
+    <div class="official">常用官方链接：
+      <a href="https://www.mofcom.gov.cn/zcfb/dwmygl/art/2023/art_07c75ecad2a648fbad6179dc9e2bf763.html" target="_blank" rel="noopener">禁止出口目录</a> ·
+      <a href="https://www.mofcom.gov.cn/zfxxgk/gkml/art/2025/art_3043acb423c042b895e426b5ed6fa4e5.html" target="_blank" rel="noopener">出口许可证目录2026</a> ·
+      <a href="https://chinawto.mofcom.gov.cn/article/jsbl/zszc/202306/20230603418270.shtml" target="_blank" rel="noopener">锂电包装</a> ·
+      <a href="https://www.gov.cn/zhengce/zhengceku/2019-10/17/content_5441297.htm" target="_blank" rel="noopener">财税103号无票免税</a> ·
+      <a href="https://zh.vietnamplus.vn/article-post244128.vnp" target="_blank" rel="noopener">越南平台代扣</a>
+    </div>`;
+  box.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+
+const listQ=document.getElementById("listQ");
+const listStatus=document.getElementById("listStatus");
+const listRelated=document.getElementById("listRelated");
+const listStats=document.getElementById("listStats");
+[listQ,listStatus,listRelated].forEach(el=>el.addEventListener("input",renderList));
+
+/* ---- 提问 / 关键词检索 ---- */
+function buildSearchIndex(){
+  const items=[];
+  function add(id, title, text, kind){
+    items.push({id, title, text:(text||'').replace(/\s+/g,' ').trim(), kind});
+  }
+  document.querySelectorAll('main .panel[id]').forEach(sec=>{
+    const h=sec.querySelector('h2');
+    const title=h?h.textContent.replace(/\s+/g,' ').trim():sec.id;
+    add(sec.id, title, sec.innerText, '正文');
+  });
+  document.querySelectorAll('#glossary details').forEach((d,i)=>{
+    const s=d.querySelector('summary');
+    add('glossary', '名词：'+(s?s.textContent:('词条'+i)), d.innerText, '名词');
+  });
+  (window.EXPORT_LIST||[]).forEach(row=>{
+    add('export-list', '清单：'+row.name, [row.cat,row.name,row.tip,(row.related||[]).join(' ')].join(' '), '禁限清单');
+  });
+  (window.KB_ITEMS||[]).forEach(it=>{
+    add('archive', '卡片：'+it.title, [it.title,it.keywords,it.plain,it.topic].join(' '), '卡片');
+  });
+  // 常见问句别名加权
+  const aliases=[
+    {id:'s5', title:'专题：能不能退税', text:'能不能退税 出口退税 有票 专票 条件 流程', kind:'问答'},
+    {id:'s3b', title:'专题：随州综试区', text:'随州 综试区 无票免税 武汉 黄石', kind:'问答'},
+    {id:'s7', title:'专题：纸碗报检', text:'纸碗 报检 法检 食品接触 4823', kind:'问答'},
+    {id:'s6', title:'专题：越南公司代扣', text:'越南 公司 代扣 个体 Shopee', kind:'问答'},
+    {id:'s5', title:'专题：查退税率', text:'出口退税率 查询 电子税务局', kind:'问答'},
+    {id:'s2', title:'专题：锂电池危运', text:'锂电池 危运 UN38.3 气雾', kind:'问答'},
+    {id:'s4', title:'专题：专票一般纳税人', text:'专票 一般纳税人 小规模 备案', kind:'问答'},
+    {id:'s3', title:'专题：9610无票免税', text:'9610 无票免税 综试区', kind:'问答'},
+  ];
+  aliases.forEach(a=>items.push(a));
+  return items;
+}
+
+let SEARCH_INDEX=null;
+function runSiteSearch(q){
+  q=(q||'').trim();
+  const panel=document.getElementById('searchPanel');
+  if(!panel) return;
+  if(!q){ panel.classList.remove('open'); panel.innerHTML=''; return; }
+  if(!SEARCH_INDEX) SEARCH_INDEX=buildSearchIndex();
+  const keys=q.toLowerCase().split(/[\s,，、?？]+/).filter(Boolean);
+  const scored=[];
+  SEARCH_INDEX.forEach(it=>{
+    const hay=(it.title+' '+it.text).toLowerCase();
+    let score=0;
+    keys.forEach(k=>{ if(hay.includes(k)) score+= (it.title.toLowerCase().includes(k)?3:1); });
+    if(score>0) scored.push({...it, score});
+  });
+  scored.sort((a,b)=>b.score-a.score);
+  // dedupe by id keep best title
+  const seen=new Set();
+  const uniq=[];
+  scored.forEach(x=>{ if(!seen.has(x.id+x.title)){ seen.add(x.id+x.title); uniq.push(x);} });
+  const top=uniq.slice(0,12);
+  if(!top.length){
+    panel.innerHTML='<div class="empty">没找到。试试：能不能退税 / 随州综试区 / 纸碗报检 / 越南代扣</div>';
+    panel.classList.add('open');
+    return;
+  }
+  panel.innerHTML=top.map(x=>`<button type="button" class="hit" data-go="${x.id}"><b>[${x.kind}] ${x.title}</b><span>点击跳转 · 相关度 ${x.score}</span></button>`).join('');
+  panel.classList.add('open');
+  panel.querySelectorAll('.hit').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const id=btn.getAttribute('data-go');
+      const el=document.getElementById(id);
+      if(el){
+        el.scrollIntoView({behavior:'smooth', block:'start'});
+        el.classList.add('hl');
+        setTimeout(()=>el.classList.remove('hl'), 1800);
+      }
+      // sync side nav active
+      document.querySelectorAll('.side-nav a').forEach(a=>a.classList.toggle('active', a.getAttribute('href')==='#'+id));
+    });
+  });
+}
+
+function wireSearch(){
+  const box=document.getElementById('siteSearch');
+  const box2=document.getElementById('siteSearch2');
+  const go=()=>runSiteSearch((box&&box.value)||'');
+  document.getElementById('btnSearch')?.addEventListener('click', go);
+  box?.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); go(); }});
+  document.getElementById('btnClearSearch')?.addEventListener('click', ()=>{
+    if(box) box.value=''; if(box2) box2.value=''; runSiteSearch('');
+  });
+  document.getElementById('btnSearch2')?.addEventListener('click', ()=>{
+    if(box && box2) box.value=box2.value;
+    runSiteSearch(box2?.value||'');
+    document.getElementById('searchPanel')?.scrollIntoView({behavior:'smooth', block:'nearest'});
+  });
+  box2?.addEventListener('keydown', e=>{
+    if(e.key==='Enter'){ e.preventDefault(); document.getElementById('btnSearch2')?.click(); }
+  });
+  document.querySelectorAll('#faqPresets button').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      const q=b.getAttribute('data-q')||b.textContent;
+      if(box) box.value=q;
+      runSiteSearch(q);
+    });
+  });
+  document.getElementById('btnFocusSearch')?.addEventListener('click', ()=>{
+    box?.focus();
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+}
+
+function wireKbFilters(){
+  document.querySelectorAll("#kbQ,#kbQ2,#kbTopic,#kbTopic2,#kbLevel,#kbLevel2").forEach(el=>{
+    el.addEventListener("input", ()=>{
+      // sync paired filters
+      const map={kbQ:"kbQ2",kbQ2:"kbQ",kbTopic:"kbTopic2",kbTopic2:"kbTopic",kbLevel:"kbLevel2",kbLevel2:"kbLevel"};
+      const other=document.getElementById(map[el.id]);
+      if(other && other.value!==el.value) other.value=el.value;
+      // canonical ids used by renderKB
+      if(el.id.endsWith("2")){
+        const base=el.id.slice(0,-1);
+        const c=document.getElementById(base);
+        if(c) c.value=el.value;
+      }
+      renderKB();
+    });
+  });
+}
+const kbQ=document.getElementById("kbQ");
+const kbTopic=document.getElementById("kbTopic");
+const kbLevel=document.getElementById("kbLevel");
+wireKbFilters();
+document.getElementById("btnCheck").addEventListener("click",runCheck);
+document.getElementById("btnResetQuiz").addEventListener("click",()=>{setDefaults();runCheck();});
+setupSideNav();
+wireSearch();
+
+if(!window.EXPORT_LIST){document.getElementById("listStats").textContent="数据未加载，请重新下载完整单文件 HTML";}
+else{renderList();renderKB();setDefaults();runCheck();}
+</script>
+</body>
+</html>
